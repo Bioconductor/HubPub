@@ -26,6 +26,7 @@
 #'   \item locationprefix
 #'   \item rdatapath
 #'   \item tags
+#' }
 #' All these entries are needed in order to add the resource properly to the 
 #' metadata.csv file.
 #' 
