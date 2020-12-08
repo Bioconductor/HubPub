@@ -29,8 +29,8 @@ hub_create_package <- function(package,
     pkg <- basename(pth)
     stopifnot(
         !file.exists(pth),
-        legnth(pkg) == 1 && is.character(pkg),
-        length(available(pkg)) == 0L,
+        length(pkg) == 1 && is.character(pkg),
+        length(BiocManager::available(pkg)) == 0L,
         available_on_bioc(pkg),
         valid_package_name(pkg)
     )
@@ -42,7 +42,7 @@ hub_create_package <- function(package,
         usethis::use_git()
     }
 
-    biocthis::use_bioc_descriptions(biocViews = type)
+    biocthis::use_bioc_description(biocViews = type)
 
     usethis::use_template("pkg-package.R",
         save_as = paste0("/R/",pkg,"-package.R"),
@@ -56,7 +56,7 @@ hub_create_package <- function(package,
     usethis::use_template("make-data.R",
         save_as = "/inst/scripts/make-data.R",
         package = "HubPub")
-    usethis::package_template("make-metadata.R",
+    usethis::use_template("make-metadata.R",
         save_as = "/inst/scripts/make-metadata.R",
         package = "HubPub")
 

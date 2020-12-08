@@ -49,8 +49,10 @@ hub_add_resource <- function(package, fields)
 
     #metadata <- read.csv(file = dat_path)
 
-    dat <- strsplit(whisker.render(tmpl, data = fields), ",")
+    #dat <- strsplit(whisker.render(tmpl, data = fields), ",")
+    dat <- whisker.render(tmpl, data = fields)
     #metadata[dim(metadata)[1]+1,] <- dat[[1]]
-    write.table(dat, file = dat_path, row.names = FALSE, sep = ",", append = TRUE)
+    write.table(dat, file = dat_path, row.names = FALSE, col.names = FALSE, 
+        sep = ",", append = TRUE)
     #Test*HubMetadata(package) change for specific hub
 }
