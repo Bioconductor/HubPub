@@ -34,8 +34,8 @@
 #' 
 #' @examples
 #' tst <- list(title = "ENCODE", description = "a test entry", biocverison = "3.9", genome = NA, sourcetype = "JSON", sourceurl = "https://www.encodeproject.org", sourceversion = NA, species = NA, taxonomyid = NA, coordinate1based = NA, dataprovider = "ENCODE Project", maintainer = "tst person <tst@email.com>", rdataclass = "data.table", dispatchclass = "Rda", locationprefix = NA, rdatapath = "ENCODExplorerData/encode_df_lite.rda", tags = "ENCODE")
-#' hub_add_resource("~/Documents/tstPkg", fields = tst)
-hub_add_resource <- function(package, fields)
+#' add_resource("~/Documents/tstPkg", fields = tst)
+add_resource <- function(package, fields)
 {
     fl <- system.file("inst", "templates", "metadata.csv",
         package = "HubPub")

@@ -17,8 +17,8 @@
 #' 
 #' @examples
 #' fl <- tempdir()
-#' hub_create_package(paste0(fl, "/tstPkg"), "AnnotationHub", TRUE)
-hub_create_package <- function(package,
+#' create_package(paste0(fl, "/tstPkg"), "AnnotationHub", TRUE)
+create_package <- function(package,
     type = c("AnnotationHub", "ExperimentHub"),
     use_git = FALSE)
 {
