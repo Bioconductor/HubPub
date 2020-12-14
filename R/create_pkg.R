@@ -13,6 +13,8 @@
 #' @param use_git A `logical(1)` indicating whether to set up `git` using 
 #' `usethis::use_git()`. Default is set to FALSE.
 #' 
+#' @importFrom available available_on_bioc
+#' 
 #' @export
 #' 
 #' @examples
