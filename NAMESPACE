@@ -2,3 +2,9 @@
 
 export(add_resource)
 export(create_pkg)
+export(publish_resource)
+importFrom(available,available_on_bioc)
+importFrom(aws.s3,put_folder)
+importFrom(aws.s3,put_object)
+importFrom(fs,is_file)
+importFrom(whisker,whisker.render)
