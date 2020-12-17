@@ -22,7 +22,7 @@
 publish_resource <- function(path, object)
 {
     vars <- c("AWS_DEFAULT_OUTPUT", "AWS_DEFAULT_REGION", "AWS_ACCESS_KEY_ID", "AWS_SECRET_ACCESS_KEY")
-    tryCatch(stopifnot(any(nzchar(Sys.getenv(vars)))),
+    tryCatch(stopifnot(all(nzchar(Sys.getenv(vars)))),
         error = stop("Not all system environments are set, do so and rerun function.")
     )
 
