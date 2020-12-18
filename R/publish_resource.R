@@ -33,9 +33,14 @@ publish_resource <- function(path, object)
             bucket = "annotation-contributor",
             acl = "public-read"
         ) 
-    else
-        put_folder(folder = path,
-            bucket = "annotation-contributor",
-            acl = "public-read"
-        ) 
+    else {
+            files <- list.files(path)
+            sapply(files, function(f) {
+                put_object(file = f,
+                    object = paste0(object, f),
+                    bucket = "annotation-contributor",
+                    acl = "public-read"
+                )
+            })
+    }
 }
