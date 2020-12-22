@@ -1,17 +1,23 @@
 Package: HubPub
-Title: What the Package Does (One Line, Title Case)
-Version: 0.0.0.9000
-Authors@R: 
-    person(given = "First",
-           family = "Last",
-           role = c("aut", "cre"),
-           email = "first.last@example.com",
-           comment = c(ORCID = "YOUR-ORCID-ID"))
-Description: What the package does (one paragraph).
-License: `use_mit_license()`, `use_gpl3_license()` or friends to
-    pick a license
-Imports: available, usethis, biocthis, whisker
+Title: Utilities to create and use Bioconductor Hubs
+Version: 0.99.0
+Authors@R: c(
+    person("Kayla", "Interdonato", email = "kayla.morrell@roswellpark.org",
+        role = c("aut", "cre")),
+    person("Martin", "Morgan", role = "aut"))
+Description: HubPub provides users with functionality to help with the 
+    Bioconductor Hub structures. The package provides the ability to create a 
+    skeleton of a Hub style package that the user can then populate with the 
+    necessary information. There are also functions to help add resources to 
+    the Hub package metadata files as well as publish data to the Bioconductor 
+    S3 bucket. 
+License: Artistic-2.0
+Imports: available,
+    usethis,
+    biocthis,
+    whisker,
+    fs
 Encoding: UTF-8
-LazyData: true
+LazyData: false
 Roxygen: list(markdown = TRUE)
 RoxygenNote: 7.1.1
