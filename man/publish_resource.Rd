@@ -7,20 +7,28 @@
 publish_resource(path, object)
 }
 \arguments{
-\item{path}{A \code{character(1)} path to the file or directory to be added to
-the bucket.}
+\item{path}{A \code{character(1)} path to the file or the name of the empty
+directory to be added to the bucket.}
 
 \item{object}{A \code{character(1)} to indicate how the file should be named on
 the bucket.}
 }
 \description{
 This function uses functionality from the aws.s3 package to put files or
-directorieso on the Bioconductor's test hub S3 bucket. The user should
+empty directories on the Bioconductor's test hub S3 bucket. The user should
 have already contacted the hubs maintainers at hubs@bioconductor.org to get
 the necessary credentials to access the bucket. These credentials should be
 delcared in the system environment prior to running this function.
 }
 \examples{
-fl <- tempdir()
+tmp_dir <- tempdir()
+tmp_fl1 <- tempfile()
+utils::write.csv(mtcars, file = tmp_fl1)
+tmp_fl2 <- tempfile()
+utils::write.csv(mtcars, file = tmp_fl2)
+publish_resource(tmp_dir, "test_dir/")
 
+tmp_fl3 <- tempfile()
+utils::write.csv(mtcars, file = tmp_fl3)
+publish_resouce(tmp_fl3, "test_dir/temp_file3.csv")
 }

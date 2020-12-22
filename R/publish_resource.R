@@ -17,10 +17,16 @@
 #' @export
 #'
 #' @examples
-#' publish_resource("test_dir")
-#' tmp <- tempfile()
-#' utils::write.csv(mtcars, file = tmp)
-#' publish_resource(tmp, "test_dir/mtcars.csv")
+#' tmp_dir <- tempdir()
+#' tmp_fl1 <- tempfile()
+#' utils::write.csv(mtcars, file = tmp_fl1)
+#' tmp_fl2 <- tempfile()
+#' utils::write.csv(mtcars, file = tmp_fl2)
+#' publish_resource(tmp_dir, "test_dir/")
+#'
+#' tmp_fl3 <- tempfile()
+#' utils::write.csv(mtcars, file = tmp_fl3)
+#' publish_resouce(tmp_fl3, "test_dir/temp_file3.csv")
 publish_resource <- function(path, object)
 {
     vars <- c("AWS_DEFAULT_OUTPUT", "AWS_DEFAULT_REGION", "AWS_ACCESS_KEY_ID", "AWS_SECRET_ACCESS_KEY")

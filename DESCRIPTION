@@ -16,6 +16,7 @@ Imports: available,
     usethis,
     biocthis,
     whisker,
+    aws.s3,
     fs
 Encoding: UTF-8
 LazyData: false
