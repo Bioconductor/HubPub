@@ -30,4 +30,5 @@ fields.
 \examples{
 fl <- tempdir()
 create_pkg(paste0(fl, "/tstPkg"), "AnnotationHub", TRUE)
+
 }

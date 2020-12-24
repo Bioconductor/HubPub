@@ -1,47 +1,55 @@
 #' Add a hub resource
-#' 
+#'
 #' This function adds a hub resource to the AH or EH package metadata.csv file.
-#' It can be used while creating a new hub package or for adding data to an 
+#' It can be used while creating a new hub package or for adding data to an
 #' existing package.
-#' 
-#' @param package A `character(1)` with the name of an existing hub package or 
+#'
+#' @param package A `character(1)` with the name of an existing hub package or
 #' the path to a newly created (not yet submitted/accepted) hub package.
-#' @param fields A named character list with the data to be added to the 
-#' resource. The required entries are:
-#' \itemize{
-#'   \item title
-#'   \item description
-#'   \item biocversion
-#'   \item genome
-#'   \item soucetype
-#'   \item sourceurl
-#'   \item sourceversion
-#'   \item species
-#'   \item taxonomyid
-#'   \item coordinate1based
-#'   \item dataprovider
-#'   \item maintainer
-#'   \item rdataclass
-#'   \item dispatchclass
-#'   \item locationprefix
-#'   \item rdatapath
-#'   \item tags
-#' }
-#' All these entries are needed in order to add the resource properly to the 
-#' metadata.csv file.
-#' 
-#' @importFrom whisker whisker.render
+#'
+#' @param fields A named list with the data to be added to the
+#' resource. Elements and content of the list are described in `?metadata`.
+#'
+#' @importFrom dplyr bind_rows
+#'
+#' @examples
+#' ## create a mock package with metadata.csv; these steps are usually
+#' ## done by `create_pkg()` ...
+#' pkgdir <- tempfile()
+#' metadata_path <- file.path(pkgdir, "inst", "extdata", "metadata.csv")
+#' dir.create(dirname(metadata_path), recursive = TRUE)
+#' writeLines(paste(names(metadata()), collapse = ","), metadata_path)
+#'
+#'
+#' ## create a metadata record
+#' metadata <- metadata(
+#'     Title = "ENCODE",
+#'     Description = "a test entry",
+#'     BiocVersion = "4.1",
+#'     Genome = NA_character_,
+#'     SourceType = "JSON",
+#'     SourceUrl = "https://www.encodeproject.org",
+#'     SourceVersion = "x.y.z",
+#'     Species = NA_character_,
+#'     TaxonomyId = NA_integer_,
+#'     Coordinate_1_based = NA,
+#'     DataProvider = "ENCODE Project",
+#'     Maintainer = "tst person <tst@email.com>",
+#'     RDataClass = "data.table",
+#'     DispatchClass = "Rda",
+#'     Location_Prefix = NA_character_,
+#'     RDataPath = "ENCODExplorerData/encode_df_lite.rda",
+#'     Tags = c("ENCODE", "Homo sapiens")
+#' )
+#'
+#' ## add the record to the metadata
+#' add_resource(pkgdir, metadata)
 #'
 #' @export
-#' 
-#' @examples
-#' tst <- list(title = "ENCODE", description = "a test entry", biocverison = "3.9", genome = NA, sourcetype = "JSON", sourceurl = "https://www.encodeproject.org", sourceversion = NA, species = NA, taxonomyid = NA, coordinate1based = NA, dataprovider = "ENCODE Project", maintainer = "tst person <tst@email.com>", rdataclass = "data.table", dispatchclass = "Rda", locationprefix = NA, rdatapath = "ENCODExplorerData/encode_df_lite.rda", tags = "ENCODE")
-#' add_resource("~/Documents/tstPkg", fields = tst)
 add_resource <- function(package, fields)
 {
-    fl <- system.file("inst", "templates", "metadata.csv",
-        package = "HubPub")
-    tmpl <- readLines(fl)
+    .metadata_validate(fields)
+    fields[["Tags"]] <- list(fields[["Tags"]])
 
     ## read in the metadata.csv file
     if (available_on_bioc(package))
@@ -49,11 +57,10 @@ add_resource <- function(package, fields)
     else
         dat_path <- system.file("extdata", "metadata.csv", package = package)
 
-    #metadata <- read.csv(file = dat_path)
+    metadata <- .import_metadata(dat_path)
+    metadata <- bind_rows(metadata, fields)
+    .export_metadata(metadata, dat_path)
 
-    tmpl_dat <- unlist(whisker.render(tmpl, data = fields))
-    dat <- paste0(tmpl_dat, collapse = '","')
-    write.table(dat, file = dat_path, row.names = FALSE, col.names = FALSE, 
-        sep = ",", append = TRUE)
     #Test*HubMetadata(package) change for specific hub
+    dat_path
 }

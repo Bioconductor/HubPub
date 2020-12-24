@@ -15,7 +15,7 @@ License: Artistic-2.0
 Imports: available,
     usethis,
     biocthis,
-    whisker,
+    dplyr,
     aws.s3,
     fs
 Encoding: UTF-8

@@ -1,0 +1,194 @@
+.METADATA <- list(
+    Title = character(1),
+    Description = character(1),
+    BiocVersion = package_version("0.0"),
+    Genome = character(1),
+    SourceType = character(1),
+    SourceUrl = character(1),
+    SourceVersion = character(1),
+    Species = character(1),
+    TaxonomyId = integer(1),
+    Coordinate_1_based = NA,
+    DataProvider = character(1),
+    Maintainer = character(1),
+    RDataClass = character(1),
+    DispatchClass = character(1),
+    Location_Prefix = character(1),
+    RDataPath = character(1),
+    Tags = character()
+)
+
+
+.metadata_validate <-
+    function(value)
+{
+    ## all names of user-supplied value in names of template
+    stopifnot(
+        setequal(names(value), names(.METADATA))
+    )
+
+    ## make sure value is in same order as template
+    value <- value[names(.METADATA)]
+
+    ## check value to class of template
+    ok <- mapply(function(v, t) inherits(v, class(t)), value, .METADATA)
+    if (!all(ok))
+        stop(
+            "'class(value)' differs from class of template for fields:\n    ",
+            paste(names(.METADATA)[!ok], collapse = "\n    ")
+        )
+
+    TRUE
+}
+
+## FIXME: update the documentation for each @param to include
+## information from ?AnnotationHubMetadata
+
+#' Create and validate metadata
+#'
+#' This functions makes a list of values that can be used to add as a
+#' resource to a 'metadata.csv' file in a Hub package. The type of
+#' each argument indicates the expected value, e.g., `Title =
+#' character(1)` indicates that it is expected to be a character
+#' vector of length 1. See individual parameters for more information.
+#'
+#' @param Title character(1)
+#'
+#' @param Description character(1).
+#'
+#' @param BiocVersion The two-digit version of Bioconductor the
+#'     resource is being introduced into. Could be a character vector
+#'     `"4.1"` or an object created from `package_version()`, e.g.,
+#'     `package_version("4.1")`.
+#'
+#' @param Genome character(1).
+#'
+#' @param SourceType character(1).
+#'
+#' @param SourceUrl character(1).
+#'
+#' @param SourceVersion character(1). A description of the version of
+#'     the resource in the original source. Since source version may
+#'     not follow R / Bioconductor versioning practices, this field
+#'     is not restricted to a `package_version()` format.
+#'
+#' @param Species character(1).
+#'
+#' @param TaxonomyId integer(1).
+#'
+#' @param Coordinate_1_based logical(1) are the genomic coordinates in
+#'     the resource 0-based, or 1-based? Use NA if genomic coordinates
+#'     are not present in the resource.
+#'
+#' @param DataProvider character(1).
+#'
+#' @param Maintainer character(1).
+#'
+#' @param RDataClass character(1).
+#'
+#' @param DispatchClass character(1).
+#'
+#' @param Location_Prefix character(1).
+#'
+#' @param RDataPath character(1).
+#'
+#' @param Tags character() Zero or more tags describing the data.
+#'
+#' @examples
+#' metadata()
+#'
+#' tst <- metadata(
+#'     Title = "ENCODE",
+#'     Description = "a test entry",
+#'     BiocVersion = package_version("3.9"),
+#'     Genome = NA_character_,
+#'     SourceType = "JSON",
+#'     SourceUrl = "https://www.encodeproject.org",
+#'     SourceVersion = package_version("0.0"),
+#'     Species = NA_character_,
+#'     TaxonomyId = NA_integer_,
+#'     Coordinate_1_based = NA,
+#'     DataProvider = "ENCODE Project",
+#'     Maintainer = "tst person <tst@email.com>",
+#'     RDataClass = "data.table",
+#'     DispatchClass = "Rda",
+#'     Location_Prefix = NA_character_,
+#'     RDataPath = "ENCODExplorerData/encode_df_lite.rda",
+#'     Tags = c("ENCODE", "Homo sapiens")
+#' )
+#'
+#' @export
+metadata <- function(
+    Title = character(1),
+    Description = character(1),
+    BiocVersion = package_version("0.0"),
+    Genome = character(1),
+    SourceType = character(1),
+    SourceUrl = character(1),
+    SourceVersion = character(1),
+    Species = character(1),
+    TaxonomyId = integer(1),
+    Coordinate_1_based = NA,
+    DataProvider = character(1),
+    Maintainer = character(1),
+    RDataClass = character(1),
+    DispatchClass = character(1),
+    Location_Prefix = character(1),
+    RDataPath = character(1),
+    Tags = character())
+{
+    BiocVersion <- package_version(BiocVersion)
+    metadata <- list(
+        Title = Title,
+        Description = Description,
+        BiocVersion = BiocVersion,
+        Genome = Genome,
+        SourceType = SourceType,
+        SourceUrl = SourceUrl,
+        SourceVersion = SourceVersion,
+        Species = Species,
+        TaxonomyId = TaxonomyId,
+        Coordinate_1_based = Coordinate_1_based,
+        DataProvider = DataProvider,
+        Maintainer = Maintainer,
+        RDataClass = RDataClass,
+        DispatchClass = DispatchClass,
+        Location_Prefix = Location_Prefix,
+        RDataPath = RDataPath,
+        Tags = Tags
+    )
+    .metadata_validate(metadata)
+    metadata
+}
+
+## column classes for read.csv
+.metadata_colclasses <-
+    function()
+{
+    classes <- lapply(.METADATA, class)
+    classes$BiocVersion <- "character"
+
+    unlist(classes)
+}        
+
+#' @importFrom utils read.csv write.csv
+.import_metadata <-
+    function(path)
+{
+    metadata <- read.csv(path, colClasses = .metadata_colclasses())
+
+    metadata$BiocVersion <- package_version(metadata$BiocVersion)
+    metadata$Tags <- strsplit(metadata$Tags, ",[ ]*")
+
+    metadata
+}
+
+.export_metadata <-
+    function(metadata, path)
+{
+    metadata$BiocVersion <- as.character(metadata$BiocVersion)
+    metadata$Tags <- vapply(
+        metadata$Tags, paste, character(1), collapse = ", "
+    )
+    write.csv(metadata, file = path, row.names = FALSE)
+}
