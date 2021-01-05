@@ -11,18 +11,18 @@
 #' @param type A `character(1)` to indicate what type of hub package is to be
 #' created. Either `AnnotationHub` or `ExperimentHub` are acceptable.
 #' @param use_git A `logical(1)` indicating whether to set up `git` using
-#' `usethis::use_git()`. Default is set to FALSE.
+#' `usethis::use_git()`. Default is set to TRUE.
 #'
 #' @importFrom available available_on_bioc valid_package_name
 #'
 #' @examples
 #' fl <- tempdir()
-#' create_pkg(paste0(fl, "/tstPkg"), "AnnotationHub", TRUE)
+#' create_pkg(paste0(fl, "/tstPkg"), "AnnotationHub")
 #'
 #' @export
 create_pkg <- function(package,
     type = c("AnnotationHub", "ExperimentHub"),
-    use_git = FALSE)
+    use_git = TRUE)
 {
     current_dir <- getwd()
     on.exit(setwd(current_dir))
