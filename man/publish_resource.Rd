@@ -7,16 +7,17 @@
 publish_resource(path, object)
 }
 \arguments{
-\item{path}{A \code{character(1)} path to the file or the name of the empty
-directory to be added to the bucket.}
+\item{path}{A \code{character(1)} path to the file or the name of the directory
+to be added to the bucket. If adding a directory, be sure there are no
+nested directories and only files within it.}
 
 \item{object}{A \code{character(1)} to indicate how the file should be named on
 the bucket.}
 }
 \description{
 This function uses functionality from the aws.s3 package to put files or
-empty directories on the Bioconductor's test hub S3 bucket. The user should
-have already contacted the hubs maintainers at hubs@bioconductor.org to get
+directories on the Bioconductor's test hub S3 bucket. The user should have
+already contacted the hubs maintainers at hubs@bioconductor.org to get
 the necessary credentials to access the bucket. These credentials should be
 delcared in the system environment prior to running this function.
 }
