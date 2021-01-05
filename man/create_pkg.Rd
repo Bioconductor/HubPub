@@ -4,11 +4,7 @@
 \alias{create_pkg}
 \title{Create a Bioconductor Hub package}
 \usage{
-create_pkg(
-  package,
-  type = c("AnnotationHub", "ExperimentHub"),
-  use_git = FALSE
-)
+create_pkg(package, type = c("AnnotationHub", "ExperimentHub"), use_git = TRUE)
 }
 \arguments{
 \item{package}{A \code{character(1)} with the path of the package to be created.}
@@ -17,7 +13,7 @@ create_pkg(
 created. Either \code{AnnotationHub} or \code{ExperimentHub} are acceptable.}
 
 \item{use_git}{A \code{logical(1)} indicating whether to set up \code{git} using
-\code{usethis::use_git()}. Default is set to FALSE.}
+\code{usethis::use_git()}. Default is set to TRUE.}
 }
 \description{
 This function creates the skeleton of a package that follow the guidelines
@@ -25,10 +21,14 @@ for Bioconductor type packages. It is expected of the user to go through and
 make any necessary changes or improvements once the package begins to take
 shape. For examples, the DESCRIPTION contains very basic requirements, but
 the developer should go back and fill in the 'Title:' and 'Description:'
-fields.
+fields. There will be two questions that need input from the user. The first
+will as the user if they want to commit files, this can be skipped for now.
+The second will ask if the user wants to overwrite the pre-existing file.
+This should be done, since this is going to over write the 'usethis' styled
+DESCRIPTION file for a Bioconductor styled file.
 }
 \examples{
 fl <- tempdir()
-create_pkg(paste0(fl, "/tstPkg"), "AnnotationHub", TRUE)
+create_pkg(paste0(fl, "/tstPkg"), "AnnotationHub")
 
 }
