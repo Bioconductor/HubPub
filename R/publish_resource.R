@@ -40,10 +40,10 @@ publish_resource <- function(path, object)
             acl = "public-read"
         ) 
     else {
-            files <- list.files(path)
+            files <- list.files(path, full.names = TRUE)
             sapply(files, function(f) {
                 put_object(file = f,
-                    object = paste0(object, f),
+                    object = paste0(object, basename(f)),
                     bucket = "annotation-contributor",
                     acl = "public-read"
                 )
