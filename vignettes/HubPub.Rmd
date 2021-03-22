@@ -1,0 +1,56 @@
+---
+title: "HubPub: Help with publication of Hub packages"
+author:
+- name: Kayla Interdonato
+  affiliation: Roswell Park Comprehensive Cancer Center, Buffalo, NY
+- name: Martin Morgan
+  affiliation: Roswell Park Comprehensive Cancer Center, Buffalo, NY
+date: "`r Sys.Date()`"
+output:
+    BiocStyle::html_document:
+        toc: true
+        toc_float: true
+package: HubPub
+vignette: >
+  %\VignetteIndexEntry{HubPub: Help with publication of Hub packages}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r setup, include = FALSE}
+knitr::opts_chunk$set(
+    collapse = TRUE,
+    comment = "#>"
+)
+```
+
+# Introduction
+
+# Installation
+Install the most recent version from Bioconductor:
+
+```{r bioconductor, eval = FALSE}
+if(!requireNamespace("BiocManager", quietly = TRUE))
+    install.packages("BiocManager")
+BiocManager::install("HubPub")
+```
+
+Then load `HubPub`:
+
+```{r load, message = FALSE}
+library(HubPub)
+```
+
+# HubPub
+
+## Creating a Hub styled package
+
+## Adding a resource to the metadata file
+
+## Publishing the resource to AWS S3
+
+# Session Information
+
+```{r session_info}
+sessionInfo()
+```
