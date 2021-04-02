@@ -41,9 +41,6 @@
     TRUE
 }
 
-## FIXME: update the documentation for each @param to include
-## information from ?AnnotationHubMetadata
-
 #' Create and validate metadata
 #'
 #' This functions makes a list of values that can be used to add as a
@@ -52,47 +49,81 @@
 #' character(1)` indicates that it is expected to be a character
 #' vector of length 1. See individual parameters for more information.
 #'
-#' @param Title character(1)
+#' @param Title `character(1)` Title for the resource with version or genome 
+#'     build as appropriate.
 #'
-#' @param Description character(1).
+#' @param Description `character(1)` Description of the resource. May include 
+#'     details such as data type, format, study origin, sequencing 
+#'     technology, treated vs control, number of samples etc.
 #'
 #' @param BiocVersion The two-digit version of Bioconductor the
 #'     resource is being introduced into. Could be a character vector
 #'     `"4.1"` or an object created from `package_version()`, e.g.,
 #'     `package_version("4.1")`.
 #'
-#' @param Genome character(1).
+#' @param Genome `character(1)` Name of genome build.
 #'
-#' @param SourceType character(1).
+#' @param SourceType `character(1)` Form of originial data, e.g., BED, FASTA, 
+#'     etc. `getValidSourceTypes()` list currently acceptable values. If nothing
+#'     seems appropriate for your data reach out to maintainer@bioconductor.org.
 #'
-#' @param SourceUrl character(1).
+#' @param SourceUrl `character(1)` URL of originial resource(s).
 #'
-#' @param SourceVersion character(1). A description of the version of
+#' @param SourceVersion `character(1)`. A description of the version of
 #'     the resource in the original source. Since source version may
 #'     not follow R / Bioconductor versioning practices, this field
 #'     is not restricted to a `package_version()` format.
 #'
-#' @param Species character(1).
+#' @param Species `character(1)` Species name. For help on valid species see 
+#'     `getSpeciesList`, `validSpecies`, or `suggestSpecies`.
 #'
-#' @param TaxonomyId integer(1).
+#' @param TaxonomyId `integer(1)` NCBI code. There are checks for valid 
+#'     taxonomyID given the Species which produce warnings. See
+#'     GenomeInfoDb::loadTaxonomyDb() for full validation table.
 #'
-#' @param Coordinate_1_based logical(1) are the genomic coordinates in
+#' @param Coordinate_1_based `logical(1)` are the genomic coordinates in
 #'     the resource 0-based, or 1-based? Use NA if genomic coordinates
 #'     are not present in the resource.
 #'
-#' @param DataProvider character(1).
+#' @param DataProvider `character(1)` Provider of original data, e.g., NCBI, 
+#'     UniProt etc.
 #'
-#' @param Maintainer character(1).
+#' @param Maintainer `character(1)` Maintainer name and email address, `A 
+#'     Maintainer <URL: a. maintainer@email.com>`.
 #'
-#' @param RDataClass character(1).
+#' @param RDataClass `character(1)` Class of derived R object, e.g., GRanges. 
+#'     Length must match the length of `RDataPath`.
 #'
-#' @param DispatchClass character(1).
+#' @param DispatchClass `character(1)` Determines how data are loaded into R. 
+#'     The value for this field should be `Rda` if the data were serialized with 
+#'     `save()` and `Rds` if serialized with `saveRDS`. The filename should have
+#'     the appropriate `rda` or `rds` extension.
 #'
-#' @param Location_Prefix character(1).
+#'     A number of dispatch classes are pre-defined in 
+#'     AnnotationHub/R/AnnotationHubResource-class.R with the suffix `Resource`.
+#'     For example, if you have sqlite files, the AnnotationHubResource-class.R
+#'     defines SQLiteFileResource so the DispatchClass would be SQLiteFile. 
+#'     Contact maintainer@bioconductor.org if you are not sure which class to 
+#'     use. The function `AnnotationHub::DispatchClassList()` will output a 
+#'     matrix of currently implemented DispatchClass and brief description of 
+#'     utility. If a predefine class does not seem appropriate contact 
+#'     maintainer@bioconductor.org.
 #'
-#' @param RDataPath character(1).
+#' @param Location_Prefix `character(1)` URL location of AWS S3 bucket or web 
+#'     site where resource is located.
 #'
-#' @param Tags character() Zero or more tags describing the data.
+#' @param RDataPath `character(1)` File path to where object is stored in AWS S3
+#'     bucket or on the web. This field should be the remainder of the path to 
+#'     the resource. The `Location_Prefix` will be prepended to `RDataPath` for
+#'     the full path to the resource. If the resource is stored in 
+#'     Bioconductor's AWS S3 buckets, it should start with the name of the 
+#'     package associated with the metadata and should not start with a leading 
+#'     slash. It should include the resource file name. For strongly associated 
+#'     files, like a bam file and its index file, the two files should be 
+#'     seperates with a colon `:`. This will link a single hub id with multiple
+#'     files.
+#'
+#' @param Tags `character()` Zero or more tags describing the data.
 #'
 #' @examples
 #' metadata()

@@ -25,47 +25,79 @@ metadata(
 )
 }
 \arguments{
-\item{Title}{character(1)}
+\item{Title}{\code{character(1)} Title for the resource with version or genome
+build as appropriate.}
 
-\item{Description}{character(1).}
+\item{Description}{\code{character(1)} Description of the resource. May include
+details such as data type, format, study origin, sequencing
+technology, treated vs control, number of samples etc.}
 
 \item{BiocVersion}{The two-digit version of Bioconductor the
 resource is being introduced into. Could be a character vector
 \code{"4.1"} or an object created from \code{package_version()}, e.g.,
 \code{package_version("4.1")}.}
 
-\item{Genome}{character(1).}
+\item{Genome}{\code{character(1)} Name of genome build.}
 
-\item{SourceType}{character(1).}
+\item{SourceType}{\code{character(1)} Form of originial data, e.g., BED, FASTA,
+etc. \code{getValidSourceTypes()} list currently acceptable values. If nothing
+seems appropriate for your data reach out to maintainer@bioconductor.org.}
 
-\item{SourceUrl}{character(1).}
+\item{SourceUrl}{\code{character(1)} URL of originial resource(s).}
 
-\item{SourceVersion}{character(1). A description of the version of
+\item{SourceVersion}{\code{character(1)}. A description of the version of
 the resource in the original source. Since source version may
 not follow R / Bioconductor versioning practices, this field
 is not restricted to a \code{package_version()} format.}
 
-\item{Species}{character(1).}
+\item{Species}{\code{character(1)} Species name. For help on valid species see
+\code{getSpeciesList}, \code{validSpecies}, or \code{suggestSpecies}.}
 
-\item{TaxonomyId}{integer(1).}
+\item{TaxonomyId}{\code{integer(1)} NCBI code. There are checks for valid
+taxonomyID given the Species which produce warnings. See
+GenomeInfoDb::loadTaxonomyDb() for full validation table.}
 
-\item{Coordinate_1_based}{logical(1) are the genomic coordinates in
+\item{Coordinate_1_based}{\code{logical(1)} are the genomic coordinates in
 the resource 0-based, or 1-based? Use NA if genomic coordinates
 are not present in the resource.}
 
-\item{DataProvider}{character(1).}
+\item{DataProvider}{\code{character(1)} Provider of original data, e.g., NCBI,
+UniProt etc.}
 
-\item{Maintainer}{character(1).}
+\item{Maintainer}{\code{character(1)} Maintainer name and email address, \verb{A  Maintainer <URL: a. maintainer@email.com>}.}
 
-\item{RDataClass}{character(1).}
+\item{RDataClass}{\code{character(1)} Class of derived R object, e.g., GRanges.
+Length must match the length of \code{RDataPath}.}
 
-\item{DispatchClass}{character(1).}
+\item{DispatchClass}{\code{character(1)} Determines how data are loaded into R.
+The value for this field should be \code{Rda} if the data were serialized with
+\code{save()} and \code{Rds} if serialized with \code{saveRDS}. The filename should have
+the appropriate \code{rda} or \code{rds} extension.\preformatted{A number of dispatch classes are pre-defined in 
+AnnotationHub/R/AnnotationHubResource-class.R with the suffix `Resource`.
+For example, if you have sqlite files, the AnnotationHubResource-class.R
+defines SQLiteFileResource so the DispatchClass would be SQLiteFile. 
+Contact maintainer@bioconductor.org if you are not sure which class to 
+use. The function `AnnotationHub::DispatchClassList()` will output a 
+matrix of currently implemented DispatchClass and brief description of 
+utility. If a predefine class does not seem appropriate contact 
+maintainer@bioconductor.org.
+}}
 
-\item{Location_Prefix}{character(1).}
+\item{Location_Prefix}{\code{character(1)} URL location of AWS S3 bucket or web
+site where resource is located.}
 
-\item{RDataPath}{character(1).}
+\item{RDataPath}{\code{character(1)} File path to where object is stored in AWS S3
+bucket or on the web. This field should be the remainder of the path to
+the resource. The \code{Location_Prefix} will be prepended to \code{RDataPath} for
+the full path to the resource. If the resource is stored in
+Bioconductor's AWS S3 buckets, it should start with the name of the
+package associated with the metadata and should not start with a leading
+slash. It should include the resource file name. For strongly associated
+files, like a bam file and its index file, the two files should be
+seperates with a colon \code{:}. This will link a single hub id with multiple
+files.}
 
-\item{Tags}{character() Zero or more tags describing the data.}
+\item{Tags}{\code{character()} Zero or more tags describing the data.}
 }
 \description{
 This functions makes a list of values that can be used to add as a
