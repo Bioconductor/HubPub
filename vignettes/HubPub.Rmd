@@ -26,6 +26,12 @@ knitr::opts_chunk$set(
 
 # Introduction
 
+`HubPub` provides users with functionality to help with the _Bioconductor_ Hub
+structures. The package provides the ability to create a skeleton of a Hub
+style package that the user can then populate with the necessary information.
+There are also functions to help add resources to the Hub pacakge metadata
+files as well as publish data to the _Bioconductor_ S3 bucket.
+
 # Installation
 Install the most recent version from Bioconductor:
 
@@ -44,6 +50,42 @@ library(HubPub)
 # HubPub
 
 ## Creating a Hub styled package
+
+The `create_pkg()` function creates the skeleton of a package that follows the
+guidelines for a _Bioconductor_ Hub type package. Once the function is
+executed it is expected that the developer will go through and make any
+necessary changes as the package takes shape. 
+
+NOTE: This function is intended for a developer that has not created the
+package yet. If the package has already been created, then this function 
+will not be benefit the developer. There are a couple other functions in this
+package that deal with resources that might be helpful, more on these later in
+the vignette.
+
+`create_pkg()` requires a path to where the packages is to be created and the type
+of package that should be created ("AnnotationHub" or "ExperimentHub"). There is
+also a variable `use_git` that indicates if the package should be set up with git (default is `TRUE`).
+
+```{r create}
+fl <- tempdir()
+create_pkg(paste0(fl, "/examplePkg"), "ExperimentHub")
+```
+
+There are two questions that are asked as this function runs, they will
+require input from the user. The first will ask the user if they want to commit
+the files, which can get skipped for the time being. The second will ask if the
+user wants to overwrite the pre-existing DESCRIPTION file. This should be done,
+since this is going to over write the `usethis` styled DESCRIPTION file for a
+_Bioconductor_ styled file.
+
+Once the package is created the developer can go through and make any changes to
+the package. For example, the DESCRIPTON file contains very basic
+requirements but the developer should go back and fill in the 'Title:' and
+'Description:' fields.
+
+More information about what are the requirements and content for a Hub style
+package the developer can look at the "Creatin A Hub Package" vignette from
+`r Biocpkg("AnnotationHub")`.
 
 ## Adding a resource to the metadata file
 
