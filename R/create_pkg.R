@@ -29,7 +29,11 @@ create_pkg <- function(package,
     use_git = TRUE)
 {
     current_dir <- getwd()
-    on.exit(setwd(current_dir))
+    old_interactive <- options(rlang_interactive = FALSE)
+    on.exit({
+        setwd(current_dir)
+        options(old_interactive)
+    })
 
     pth <- path.expand(package)
     pkg <- basename(pth)
@@ -42,14 +46,26 @@ create_pkg <- function(package,
         valid_package_name(pkg)
     )
 
-    usethis::create_package(pth)
+    if (type == "AnnotationHub") {
+        import <- "AnnotationHubData"
+    }
+    else
+        import <- "ExperimentHubData, ExperimentHub"
+
+    bioc_fields <- list(Version = "0.99.0",
+        biocViews = type,
+        License = "Artistic-2.0",
+        Date = Sys.Date(),
+        Imports = import,
+        BugReports = paste0("https://support.bioconductor.org/t/", pkg)
+    )
+
+    usethis::create_package(pth, fields = bioc_fields)
     usethis::proj_set(pth)
 
     if(use_git) {
         usethis::use_git()
     }
-
-    biocthis::use_bioc_description(biocViews = type)
 
     usethis::use_template("pkg-package.R",
         save_as = paste0("/R/",pkg,"-package.R"),
