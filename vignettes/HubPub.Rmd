@@ -77,12 +77,48 @@ requirements but the developer should go back and fill in the 'Title:' and
 'Description:' fields.
 
 More information about what are the requirements and content for a Hub style
-package the developer can look at the "Creatin A Hub Package" vignette from
+package the developer can look at the "Creating A Hub Package" vignette from
 `r Biocpkg("AnnotationHub")`.
 
 ## Adding a resource to the metadata file
 
+Another useful function in `HubPub` is `add_resource()`. This function can be
+useful for developers who are creating a new Hub related package or for
+developers who want to add a new resource to an existing Hub package. The
+purpose of this function is to add a hub resource to the package metadata.csv
+file. The function requires the name of the package (or the path to the newly
+created package) and a named list with the data to be added to the resource. To
+get the elements and content for this list look at `?metadata`. There is also
+information in the "Creating A Hub Package" vignette from `r
+Biocpkg("AnnotationHub")`.
+
+```{r resource}
+metadata <- metadata(
+    Title = "ENCODE",
+    Descripton = "a test entry",
+    BiocVersion = "4.1",
+    Genome = NA_character_,
+    SourceType = "JSON",
+    SourceUrl = "http://www.encodeproject.org",
+    SourceVersion = "x.y.z",
+    Species = NA_character_,
+    TaxonomyId = NA_integer_,
+    Coordinate_1_based = NA,
+    DataProvider = "ENCODE Project",
+    Maintainer = "tst person <tst@email.com>",
+    RDataClass = "Rda",
+    DispatchClass = "Rda",
+    Location_Prefix = NA_character_,
+    RDataPath = "ENCODExplorerData/encode_df_lite.rda",
+    Tags = c("ENCODE", "Homo sapiens")
+)
+
+add_resource(paste0(fl, "/examplePkg"), metadata)
+```
+
 ## Publishing the resource to AWS S3
+
+
 
 # Session Information
 
