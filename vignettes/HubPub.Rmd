@@ -95,7 +95,7 @@ Biocpkg("AnnotationHub")`.
 ```{r resource}
 metadata <- metadata(
     Title = "ENCODE",
-    Descripton = "a test entry",
+    Description = "a test entry",
     BiocVersion = "4.1",
     Genome = NA_character_,
     SourceType = "JSON",
@@ -114,6 +114,15 @@ metadata <- metadata(
 )
 
 add_resource(paste0(fl, "/examplePkg"), metadata)
+```
+
+Then if you want to see what the metadata file looks like you can read in the
+csv file like the following.
+
+```{r read_metadata}
+resource <- file.path(fl, "examplePkg", "inst", "extdata", "metadata.csv")
+tst <- read.csv(resource)
+tst
 ```
 
 ## Publishing the resource to AWS S3
