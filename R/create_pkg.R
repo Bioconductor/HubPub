@@ -5,11 +5,7 @@
 #' make any necessary changes or improvements once the package begins to take
 #' shape. For examples, the DESCRIPTION contains very basic requirements, but
 #' the developer should go back and fill in the 'Title:' and 'Description:'
-#' fields. There will be two questions that need input from the user. The first 
-#' will as the user if they want to commit files, this can be skipped for now.
-#' The second will ask if the user wants to overwrite the pre-existing file. 
-#' This should be done, since this is going to over write the 'usethis' styled
-#' DESCRIPTION file for a Bioconductor styled file.
+#' fields.
 #'
 #' @param package A `character(1)` with the path of the package to be created.
 #' @param type A `character(1)` to indicate what type of hub package is to be

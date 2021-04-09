@@ -71,13 +71,6 @@ fl <- tempdir()
 create_pkg(paste0(fl, "/examplePkg"), "ExperimentHub")
 ```
 
-There are two questions that are asked as this function runs, they will
-require input from the user. The first will ask the user if they want to commit
-the files, which can get skipped for the time being. The second will ask if the
-user wants to overwrite the pre-existing DESCRIPTION file. This should be done,
-since this is going to over write the `usethis` styled DESCRIPTION file for a
-_Bioconductor_ styled file.
-
 Once the package is created the developer can go through and make any changes to
 the package. For example, the DESCRIPTON file contains very basic
 requirements but the developer should go back and fill in the 'Title:' and
