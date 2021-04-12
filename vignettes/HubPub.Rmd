@@ -127,7 +127,34 @@ tst
 
 ## Publishing the resource to AWS S3
 
+The final function in `HubPub` helps the developer with publishing data resources
+to an Bioconductor AWS S3. The function utilizes functions for the `aws.s3`
+package to place files or directories on S3. The developer should have already
+contacted the Bioconductor hubs maintainers to get the necessary credentials to
+access the bucket. Once the credentials are received the developer should
+declare them in the system environment before running this function. The
+function requires a path to the file or name of the directory to be added to the
+bucket and a name for how the object should be named on the bucket. If adding a
+directory be sure there are no nested directories and only files.
 
+The below code chunk demonstrates the use of the function using a dummy dataset.
+It will only work if the necessary global environments have been declared with
+the hub credentials.
+
+```{r publish, eval = FALSE}
+## For publishing directories
+tmp_dir <- tempdir()
+tmp_fl1 <- tempfile()
+utils::write.csv(mtcars, file = tmp_fl1)
+tmp_fl2 <- tempfile()
+utils::write.csv(mtcars, file = tmp_fl2)
+publish_resource(tmp_dir, "test_dir/")
+
+## For publishing a single file
+tmp_fl3 <- tempfile()
+utils::write.csv(mtcars, file = tmp_fl3)
+publish_resource(tmp_fl3, "test_dir/tmp_file3.csv")
+```
 
 # Session Information
 
