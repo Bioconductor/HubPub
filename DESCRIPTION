@@ -21,7 +21,8 @@ Imports: available,
 Suggests: testthat,
     knitr,
     rmarkdown,
-    BiocStyle
+    BiocStyle,
+    utils
 biocViews: DataImport, GUI, Infrastructure, Software, ThirdPartyClient
 BugReports: https://github.com/Bioconductor/HubPub/issues
 Encoding: UTF-8
