@@ -17,7 +17,7 @@ test_that("`create_pkg()` works",
     expect_identical(unname(dsc2[,"Package"]), "tstEHPkg")
     expect_identical(unname(dsc2[,"Version"]), "0.99.0")
     expect_identical(unname(dsc2[,"biocViews"]), "ExperimentHub")
-    expect_identical(unname(dsc2[,"Imports"]), "ExperimentHub,\nExperimentHubData")
+    expect_identical(unname(dsc2[,"Imports"]), "ExperimentHub")
 
     expect_error(create_pkg())
     expect_error(create_pkg(paste0(fl, "/tstAHPkg")))

@@ -4,7 +4,7 @@
 \alias{add_resource}
 \title{Add a hub resource}
 \usage{
-add_resource(package, fields)
+add_resource(package, fields, metafile = "metadata.csv")
 }
 \arguments{
 \item{package}{A \code{character(1)} with the name of an existing hub package or
@@ -12,6 +12,9 @@ the path to a newly created (not yet submitted/accepted) hub package.}
 
 \item{fields}{A named list with the data to be added to the
 resource. Elements and content of the list are described in \code{?metadata}.}
+
+\item{metafile}{A \code{character(1)} with the name of the metadata csv file.
+The default file name is 'metadata.csv'.}
 }
 \description{
 This function adds a hub resource to the AH or EH package metadata.csv file.

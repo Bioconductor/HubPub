@@ -17,7 +17,7 @@
 #'
 #' @examples
 #' fl <- tempdir()
-#' create_pkg(paste0(fl, "/tstPkg"), "AnnotationHub")
+#' create_pkg(file.path(fl, "/tstPkg"), "AnnotationHub")
 #'
 #' @export
 create_pkg <- function(package,
@@ -46,7 +46,7 @@ create_pkg <- function(package,
         import <- "AnnotationHubData"
     }
     else
-        import <- "ExperimentHubData, ExperimentHub"
+        import <- "ExperimentHub"
 
     bioc_fields <- list(Version = "0.99.0",
         biocViews = type,

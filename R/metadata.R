@@ -169,6 +169,11 @@ metadata <- function(
     Tags = character())
 {
     BiocVersion <- package_version(BiocVersion)
+    SourceVersion <- tryCatch({
+        as.character(SourceVersion)
+    }, error = function(err) {
+        stop("'SourceVersion' cannot be coerced to character(1)")
+    })
     metadata <- list(
         Title = Title,
         Description = Description,

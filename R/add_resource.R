@@ -10,6 +10,9 @@
 #' @param fields A named list with the data to be added to the
 #' resource. Elements and content of the list are described in `?metadata`.
 #'
+#' @param metafile A `character(1)` with the name of the metadata csv file.
+#'     The default file name is 'metadata.csv'. 
+#'
 #' @importFrom dplyr bind_rows
 #'
 #' @examples
@@ -46,16 +49,17 @@
 #' add_resource(pkgdir, metadata)
 #'
 #' @export
-add_resource <- function(package, fields)
+add_resource <- function(package, fields, metafile = "metadata.csv")
 {
     .metadata_validate(fields)
     fields[["Tags"]] <- list(fields[["Tags"]])
 
     ## read in the metadata.csv file
-    if (available_on_bioc(package))
-        dat_path <- file.path(package, "inst", "extdata", "metadata.csv")
+    metafile <- metafile
+    if (available_on_bioc(package)) 
+        dat_path <- file.path(package, "inst", "extdata", metafile)
     else
-        dat_path <- system.file("extdata", "metadata.csv", package = package)
+        dat_path <- system.file("extdata", metafile, package = package)
 
     metadata <- .import_metadata(dat_path)
     metadata <- bind_rows(metadata, fields)
