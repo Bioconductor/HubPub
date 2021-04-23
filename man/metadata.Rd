@@ -97,7 +97,8 @@ files, like a bam file and its index file, the two files should be
 seperates with a colon \code{:}. This will link a single hub id with multiple
 files.}
 
-\item{Tags}{\code{character()} Zero or more tags describing the data.}
+\item{Tags}{\code{character()} Zero or more tags describing the data, colon
+\code{:} separated.}
 }
 \description{
 This functions makes a list of values that can be used to add as a

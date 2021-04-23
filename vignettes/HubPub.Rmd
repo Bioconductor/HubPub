@@ -102,15 +102,15 @@ metadata <- metadata(
     SourceUrl = "http://www.encodeproject.org",
     SourceVersion = "x.y.z",
     Species = NA_character_,
-    TaxonomyId = NA_integer_,
+    TaxonomyId = as.integer(9606),
     Coordinate_1_based = NA,
     DataProvider = "ENCODE Project",
     Maintainer = "tst person <tst@email.com>",
     RDataClass = "Rda",
     DispatchClass = "Rda",
-    Location_Prefix = NA_character_,
+    Location_Prefix = "s3://experimenthub/",
     RDataPath = "ENCODExplorerData/encode_df_lite.rda",
-    Tags = c("ENCODE", "Homo sapiens")
+    Tags = "ENCODE:Homo sapiens"
 )
 
 add_resource(file.path(fl, "/examplePkg"), metadata)
@@ -142,18 +142,15 @@ It will only work if the necessary global environments have been declared with
 the hub credentials.
 
 ```{r publish}
-## For publishing directories
-tmp_dir <- tempdir()
-tmp_fl1 <- tempfile()
-utils::write.csv(mtcars, file = tmp_fl1)
-tmp_fl2 <- tempfile()
-utils::write.csv(mtcars, file = tmp_fl2)
-publish_resource(tmp_dir, "test_dir/")
+## For publishing directories with multiple files
+fl <- tempdir()
+utils::write.csv(mtcars, file = file.path(fl, "mtcars1.csv"))
+utils::write.csv(mtcars, file = file.path(fl, "mtcars2.csv"))
+publish_resource(fl, "test_dir")
 
 ## For publishing a single file
-tmp_fl3 <- tempfile()
-utils::write.csv(mtcars, file = tmp_fl3)
-publish_resource(tmp_fl3, "test_dir/tmp_file3.csv")
+utils::write.csv(mtcars, file = file.path(fl, "mtcars3.csv"))
+publish_resource(file.path(fl, "mtcars3.csv"), "test_dir")
 ```
 
 # Session Information

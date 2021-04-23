@@ -123,7 +123,8 @@
 #'     seperates with a colon `:`. This will link a single hub id with multiple
 #'     files.
 #'
-#' @param Tags `character()` Zero or more tags describing the data.
+#' @param Tags `character()` Zero or more tags describing the data, colon 
+#'     `:` separated.
 #'
 #' @examples
 #' metadata()

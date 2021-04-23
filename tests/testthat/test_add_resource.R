@@ -25,9 +25,9 @@ test_that("`add_resource()` works",
         Maintainer = "tst person <tst@email.com>",
         RDataClass = "data.table",
         DispatchClass = "Rda",
-        Location_Prefix = NA_character_,
+        Location_Prefix = "s3://annotationhub/",
         RDataPath = "ENCODExplorerData/encode_df_lite.rda",
-        Tags = c("ENCODE", "Homo sapiens")
+        Tags = "ENCODE:Homo sapiens"
     )
     add_resource(paste0(fl, "/tstResourcePkg"), metadata)
     meta2 <- read.csv(meta_path)

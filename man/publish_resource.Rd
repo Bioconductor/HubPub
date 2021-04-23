@@ -25,14 +25,11 @@ the necessary credentials to access the bucket. These credentials should be
 delcared in the system environment prior to running this function.
 }
 \examples{
-tmp_dir <- tempdir()
-tmp_fl1 <- tempfile()
-utils::write.csv(mtcars, file = tmp_fl1)
-tmp_fl2 <- tempfile()
-utils::write.csv(mtcars, file = tmp_fl2)
-publish_resource(tmp_dir, "test_dir/")
+fl <- tempfile()
+utils::write.csv(mtcars, file = file.path(fl, "mtcars1.csv"))
+utils::write.csv(mtcars, file = file.path(fl, "mtcars2.csv"))
+publish_resource(fl, "test_dir")
 
-tmp_fl3 <- tempfile()
-utils::write.csv(mtcars, file = tmp_fl3)
-publish_resouce(tmp_fl3, "test_dir/temp_file3.csv")
+utils::write.csv(mtcars, file = file.path(fl, "mtcars3.csv"))
+publish_resouce(file.path(fl, "mtcars3.csv"), "test_dir")
 }

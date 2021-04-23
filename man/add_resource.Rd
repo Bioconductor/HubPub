@@ -40,15 +40,15 @@ metadata <- metadata(
     SourceUrl = "https://www.encodeproject.org",
     SourceVersion = "x.y.z",
     Species = NA_character_,
-    TaxonomyId = NA_integer_,
+    TaxonomyId = as.integer(9606),
     Coordinate_1_based = NA,
     DataProvider = "ENCODE Project",
     Maintainer = "tst person <tst@email.com>",
     RDataClass = "data.table",
     DispatchClass = "Rda",
-    Location_Prefix = NA_character_,
+    Location_Prefix = "s3://annotationhub/",
     RDataPath = "ENCODExplorerData/encode_df_lite.rda",
-    Tags = c("ENCODE", "Homo sapiens")
+    Tags = "ENCODE:Homo sapiens"
 )
 
 ## add the record to the metadata

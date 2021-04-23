@@ -34,15 +34,15 @@
 #'     SourceUrl = "https://www.encodeproject.org",
 #'     SourceVersion = "x.y.z",
 #'     Species = NA_character_,
-#'     TaxonomyId = NA_integer_,
+#'     TaxonomyId = as.integer(9606),
 #'     Coordinate_1_based = NA,
 #'     DataProvider = "ENCODE Project",
 #'     Maintainer = "tst person <tst@email.com>",
 #'     RDataClass = "data.table",
 #'     DispatchClass = "Rda",
-#'     Location_Prefix = NA_character_,
+#'     Location_Prefix = "s3://annotationhub/",
 #'     RDataPath = "ENCODExplorerData/encode_df_lite.rda",
-#'     Tags = c("ENCODE", "Homo sapiens")
+#'     Tags = "ENCODE:Homo sapiens"
 #' )
 #'
 #' ## add the record to the metadata
@@ -69,11 +69,49 @@ add_resource <- function(package, fields, metafile = "metadata.csv")
     descrip <- read.dcf(file.path(package, "DESCRIPTION"))
     biocviews <- descrip[,"biocViews"]
     terms <- strsplit(biocviews, ",[[:space:]]*")[[1]]
+    tags <- strsplit(fields$Tags[[1]], ":")[[1]]
 
     if ("AnnotationHub" %in% terms)
-        AnnotationHubData::AnnotationHubMetadata(fields)
+        AnnotationHubData::AnnotationHubMetadata(
+            Title = fields$Title,
+            Description = fields$Description,
+            BiocVersion = fields$BiocVersion,
+            Genome = fields$Genome,
+            SourceType = fields$SourceType,
+            SourceUrl = fields$SourceUrl,
+            SourceVersion = fields$SourceVersion,
+            Species = fields$Species,
+            TaxonomyId = fields$TaxonomyId,
+            Coordinate_1_based = fields$Coordinate_1_based,
+            DataProvider = fields$DataProvider,
+            Maintainer = fields$Maintainer,
+            RDataClass = fields$RDataClass,
+            DispatchClass = fields$DispatchClass,
+            Location_Prefix = fields$Location_Prefix,
+            RDataPath = fields$RDataPath,
+            Tags = tags,
+            RDataDateAdded = Sys.time(),
+            Recipe = NA_character_)   
     else if ("ExperimentHub" %in% terms)
-        ExperimentHubData::ExperimentHubMetadata(fields)
+        ExperimentHubData::ExperimentHubMetadata(
+            Title = fields$Title,
+            Description = fields$Description,
+            BiocVersion = fields$BiocVersion,
+            Genome = fields$Genome,
+            SourceType = fields$SourceType,
+            SourceUrl = fields$SourceUrl,
+            SourceVersion = fields$SourceVersion,
+            Species = fields$Species,
+            TaxonomyId = fields$TaxonomyId,
+            Coordinate_1_based = fields$Coordinate_1_based,
+            DataProvider = fields$DataProvider,
+            Maintainer = fields$Maintainer,
+            RDataClass = fields$RDataClass,
+            DispatchClass = fields$DispatchClass,
+            Location_Prefix = fields$Location_Prefix,
+            RDataPath = fields$RDataPath,
+            Tags = tags,
+            RDataDateAdded = Sys.time())
     else
         stop("The package needs to include a valid Hub term in the biocViews")
 
