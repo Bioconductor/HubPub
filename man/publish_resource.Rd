@@ -4,7 +4,7 @@
 \alias{publish_resource}
 \title{A function that publishes resource to the hub S3 bucket}
 \usage{
-publish_resource(path, object)
+publish_resource(path, object, dry.run = TRUE)
 }
 \arguments{
 \item{path}{A \code{character(1)} path to the file or the name of the directory
@@ -13,6 +13,9 @@ nested directories and only files within it.}
 
 \item{object}{A \code{character(1)} to indicate how the file should be named on
 the bucket.}
+
+\item{dry.run}{A boolean to indicate if the resource should in fact be
+published. The defalut is TRUE, meaning the resource won't be published.}
 }
 \description{
 This function uses functionality from the aws.s3 package to put files or

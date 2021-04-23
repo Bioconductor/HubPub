@@ -68,7 +68,7 @@ also a variable `use_git` that indicates if the package should be set up with gi
 
 ```{r create}
 fl <- tempdir()
-create_pkg(paste0(fl, "/examplePkg"), "ExperimentHub")
+create_pkg(file.path(fl, "/examplePkg"), "ExperimentHub")
 ```
 
 Once the package is created the developer can go through and make any changes to
@@ -113,7 +113,7 @@ metadata <- metadata(
     Tags = c("ENCODE", "Homo sapiens")
 )
 
-add_resource(paste0(fl, "/examplePkg"), metadata)
+add_resource(file.path(fl, "/examplePkg"), metadata)
 ```
 
 Then if you want to see what the metadata file looks like you can read in the
@@ -141,7 +141,7 @@ The below code chunk demonstrates the use of the function using a dummy dataset.
 It will only work if the necessary global environments have been declared with
 the hub credentials.
 
-```{r publish, eval = FALSE}
+```{r publish}
 ## For publishing directories
 tmp_dir <- tempdir()
 tmp_fl1 <- tempfile()

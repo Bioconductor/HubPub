@@ -65,6 +65,17 @@ add_resource <- function(package, fields, metafile = "metadata.csv")
     metadata <- bind_rows(metadata, fields)
     .export_metadata(metadata, dat_path)
 
-    #Test*HubMetadata(package) change for specific hub
+    ## validate *HubMetadata(package)
+    descrip <- read.dcf(file.path(package, "DESCRIPTION"))
+    biocviews <- descrip[,"biocViews"]
+    terms <- strsplit(biocviews, ",[[:space:]]*")[[1]]
+
+    if ("AnnotationHub" %in% terms)
+        AnnotationHubData::AnnotationHubMetadata(fields)
+    else if ("ExperimentHub" %in% terms)
+        ExperimentHubData::ExperimentHubMetadata(fields)
+    else
+        stop("The package needs to include a valid Hub term in the biocViews")
+
     dat_path
 }
