@@ -17,14 +17,15 @@ Imports: available,
     biocthis,
     dplyr,
     aws.s3,
-    fs
+    fs,
+    BiocManager,
+    utils
 Suggests: AnnotationHubData,
     ExperimentHubData,
     testthat,
     knitr,
     rmarkdown,
     BiocStyle,
-    utils
 biocViews: DataImport, GUI, Infrastructure, Software, ThirdPartyClient
 BugReports: https://github.com/Bioconductor/HubPub/issues
 Encoding: UTF-8

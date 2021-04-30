@@ -100,6 +100,9 @@ files.}
 \item{Tags}{\code{character()} Zero or more tags describing the data, colon
 \code{:} separated.}
 }
+\value{
+None
+}
 \description{
 This functions makes a list of values that can be used to add as a
 resource to a 'metadata.csv' file in a Hub package. The type of

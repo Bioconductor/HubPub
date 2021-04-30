@@ -95,7 +95,7 @@
 #'     Length must match the length of `RDataPath`.
 #'
 #' @param DispatchClass `character(1)` Determines how data are loaded into R. 
-#'     The value for this field should be `Rda` if the data were serialized with 
+#'     The value for this field should be `Rda` if the data were serialized with
 #'     `save()` and `Rds` if serialized with `saveRDS`. The filename should have
 #'     the appropriate `rda` or `rds` extension.
 #'
@@ -126,6 +126,7 @@
 #' @param Tags `character()` Zero or more tags describing the data, colon 
 #'     `:` separated.
 #'
+#' @return None
 #' @examples
 #' metadata()
 #'

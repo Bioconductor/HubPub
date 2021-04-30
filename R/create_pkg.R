@@ -14,6 +14,9 @@
 #' `usethis::use_git()`. Default is set to TRUE.
 #'
 #' @importFrom available available_on_bioc valid_package_name
+#' @importFrom BiocManager available 
+#'
+#' @return Path to package location
 #'
 #' @examples
 #' fl <- tempdir()

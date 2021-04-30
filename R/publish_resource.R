@@ -16,17 +16,24 @@
 #'
 #' @importFrom aws.s3 put_object put_folder
 #' @importFrom fs is_file
+#' @importFrom utils write.csv
+#'
+#' @return None 
 #'
 #' @export
 #'
 #' @examples
-#' fl <- tempdir()
-#' utils::write.csv(mtcars, file = file.path(fl, "mtcars1.csv"))
-#' utils::write.csv(mtcars, file = file.path(fl, "mtcars2.csv"))
-#' publish_resource(fl, "test_dir")
+#' pkgdir <- tempfile()
+#' fl1 <- file.path(pkgdir, "mtcars1.csv")
+#' dir.create(dirname(fl1), recursive = TRUE)
+#' write.csv(mtcars, file = file.path(fl1))
+#' fl2 <- file.path(pkgdir, "mtcars2.csv")
+#' write.csv(mtcars, file = file.path(fl2))
+#' publish_resource(pkgdir, "test_dir")
 #'
-#' utils::write.csv(mtcars, file = file.path(fl, "mtcars3.csv"))
-#' publish_resouce(file.path(fl, "mtcars3.csv"), "test_dir")
+#' fl3 <- file.path(pkgdir, "mtcars3.csv")
+#' write.csv(mtcars, file = file.path(fl3))
+#' publish_resource(fl3, "test_dir")
 publish_resource <- function(path, object, dry.run = TRUE)
 {
     vars <- c("AWS_DEFAULT_OUTPUT", "AWS_DEFAULT_REGION", "AWS_ACCESS_KEY_ID", "AWS_SECRET_ACCESS_KEY")

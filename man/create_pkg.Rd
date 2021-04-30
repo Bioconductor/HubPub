@@ -15,6 +15,9 @@ created. Either \code{AnnotationHub} or \code{ExperimentHub} are acceptable.}
 \item{use_git}{A \code{logical(1)} indicating whether to set up \code{git} using
 \code{usethis::use_git()}. Default is set to TRUE.}
 }
+\value{
+Path to package location
+}
 \description{
 This function creates the skeleton of a package that follow the guidelines
 for Bioconductor type packages. It is expected of the user to go through and

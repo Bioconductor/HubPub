@@ -16,22 +16,21 @@ resource. Elements and content of the list are described in \code{?metadata}.}
 \item{metafile}{A \code{character(1)} with the name of the metadata csv file.
 The default file name is 'metadata.csv'.}
 }
+\value{
+Path to metadata file where resource was added
+}
 \description{
 This function adds a hub resource to the AH or EH package metadata.csv file.
 It can be used while creating a new hub package or for adding data to an
 existing package.
 }
 \examples{
-## create a mock package with metadata.csv; these steps are usually
-## done by `create_pkg()` ...
-pkgdir <- tempfile()
-metadata_path <- file.path(pkgdir, "inst", "extdata", "metadata.csv")
-dir.create(dirname(metadata_path), recursive = TRUE)
-writeLines(paste(names(metadata()), collapse = ","), metadata_path)
-
+## create a mock package
+pkgdir <- tempdir()
+create_pkg(file.path(pkgdir, "recordPkg"), "ExperimentHub")
 
 ## create a metadata record
-metadata <- metadata(
+meta <- metadata(
     Title = "ENCODE",
     Description = "a test entry",
     BiocVersion = "4.1",
@@ -52,6 +51,6 @@ metadata <- metadata(
 )
 
 ## add the record to the metadata
-add_resource(pkgdir, metadata)
+add_resource(file.path(pkgdir, "recordPkg"), meta)
 
 }

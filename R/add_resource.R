@@ -15,17 +15,15 @@
 #'
 #' @importFrom dplyr bind_rows
 #'
-#' @examples
-#' ## create a mock package with metadata.csv; these steps are usually
-#' ## done by `create_pkg()` ...
-#' pkgdir <- tempfile()
-#' metadata_path <- file.path(pkgdir, "inst", "extdata", "metadata.csv")
-#' dir.create(dirname(metadata_path), recursive = TRUE)
-#' writeLines(paste(names(metadata()), collapse = ","), metadata_path)
+#' @return Path to metadata file where resource was added
 #'
+#' @examples
+#' ## create a mock package
+#' pkgdir <- tempdir()
+#' create_pkg(file.path(pkgdir, "recordPkg"), "ExperimentHub")
 #'
 #' ## create a metadata record
-#' metadata <- metadata(
+#' meta <- metadata(
 #'     Title = "ENCODE",
 #'     Description = "a test entry",
 #'     BiocVersion = "4.1",
@@ -46,7 +44,7 @@
 #' )
 #'
 #' ## add the record to the metadata
-#' add_resource(pkgdir, metadata)
+#' add_resource(file.path(pkgdir, "recordPkg"), meta)
 #'
 #' @export
 add_resource <- function(package, fields, metafile = "metadata.csv")
