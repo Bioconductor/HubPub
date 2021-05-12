@@ -2,7 +2,7 @@
 
 export(add_resource)
 export(create_pkg)
-export(metadata)
+export(hub_metadata)
 export(publish_resource)
 importFrom(BiocManager,available)
 importFrom(available,available_on_bioc)

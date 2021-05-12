@@ -8,7 +8,7 @@
 #' the path to a newly created (not yet submitted/accepted) hub package.
 #'
 #' @param fields A named list with the data to be added to the
-#' resource. Elements and content of the list are described in `?metadata`.
+#' resource. Elements and content of the list are described in `?hub_metadata`.
 #'
 #' @param metafile A `character(1)` with the name of the metadata csv file.
 #'     The default file name is 'metadata.csv'. 
@@ -23,7 +23,7 @@
 #' create_pkg(file.path(pkgdir, "recordPkg"), "ExperimentHub")
 #'
 #' ## create a metadata record
-#' meta <- metadata(
+#' meta <- hub_metadata(
 #'     Title = "ENCODE",
 #'     Description = "a test entry",
 #'     BiocVersion = "4.1",

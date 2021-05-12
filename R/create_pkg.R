@@ -20,7 +20,7 @@
 #'
 #' @examples
 #' fl <- tempdir()
-#' create_pkg(file.path(fl, "/tstPkg"), "AnnotationHub")
+#' create_pkg(file.path(fl, "tstPkg"), "AnnotationHub")
 #'
 #' @export
 create_pkg <- function(package,
@@ -89,7 +89,7 @@ create_pkg <- function(package,
 
     usethis::use_directory("inst/extdata")
     metadata_path <- file.path(pth, "inst", "extdata", "metadata.csv")
-    writeLines(paste(names(metadata()), collapse = ","), metadata_path)
+    writeLines(paste(names(hub_metadata()), collapse = ","), metadata_path)
 
     usethis::use_testthat()
     usethis::use_template("test_metadata.R",

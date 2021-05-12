@@ -11,7 +11,7 @@ add_resource(package, fields, metafile = "metadata.csv")
 the path to a newly created (not yet submitted/accepted) hub package.}
 
 \item{fields}{A named list with the data to be added to the
-resource. Elements and content of the list are described in \code{?metadata}.}
+resource. Elements and content of the list are described in \code{?hub_metadata}.}
 
 \item{metafile}{A \code{character(1)} with the name of the metadata csv file.
 The default file name is 'metadata.csv'.}
@@ -30,7 +30,7 @@ pkgdir <- tempdir()
 create_pkg(file.path(pkgdir, "recordPkg"), "ExperimentHub")
 
 ## create a metadata record
-meta <- metadata(
+meta <- hub_metadata(
     Title = "ENCODE",
     Description = "a test entry",
     BiocVersion = "4.1",

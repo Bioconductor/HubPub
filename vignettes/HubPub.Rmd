@@ -52,33 +52,29 @@ library(HubPub)
 ## Creating a Hub styled package
 
 The `create_pkg()` function creates the skeleton of a package that follows the
-guidelines for a _Bioconductor_ Hub type package. Once the function is
-executed it is expected that the developer will go through and make any
-necessary changes as the package takes shape. 
-
-NOTE: This function is intended for a developer that has not created the
-package yet. If the package has already been created, then this function 
-will not be benefit the developer. There are a couple other functions in this
-package that deal with resources that might be helpful, more on these later in
-the vignette.
+guidelines for a _Bioconductor_ Hub type package. More information about what
+are the requirements and content for a Hub style package the developer can look
+at the "Creating A Hub Package" vignette from `r Biocpkg("AnnotationHub")`. 
 
 `create_pkg()` requires a path to where the packages is to be created and the type
 of package that should be created ("AnnotationHub" or "ExperimentHub"). There is
-also a variable `use_git` that indicates if the package should be set up with git (default is `TRUE`).
+also a variable `use_git` that indicates if the package should be set up with 
+git (default is `TRUE`).
+
+NOTE: This function is intended for a developer that has not created the package
+yet. If the package has already been created, then this function will not
+benefit the developer. There are a couple other functions in this package that
+deal with resources that might be helpful, more on these later in the vignette.
 
 ```{r create}
 fl <- tempdir()
-create_pkg(file.path(fl, "/examplePkg"), "ExperimentHub")
+create_pkg(file.path(fl, "examplePkg"), "ExperimentHub")
 ```
 
 Once the package is created the developer can go through and make any changes to
 the package. For example, the DESCRIPTON file contains very basic
 requirements but the developer should go back and fill in the 'Title:' and
 'Description:' fields.
-
-More information about what are the requirements and content for a Hub style
-package the developer can look at the "Creating A Hub Package" vignette from
-`r Biocpkg("AnnotationHub")`.
 
 ## Adding a resource to the metadata file
 
@@ -88,12 +84,12 @@ developers who want to add a new resource to an existing Hub package. The
 purpose of this function is to add a hub resource to the package metadata.csv
 file. The function requires the name of the package (or the path to the newly
 created package) and a named list with the data to be added to the resource. To
-get the elements and content for this list look at `?metadata`. There is also
-information in the "Creating A Hub Package" vignette from `r
+get the elements and content for this list look at `?hub_metadata`. There is 
+also information in the "Creating A Hub Package" vignette from `r
 Biocpkg("AnnotationHub")`.
 
 ```{r resource}
-metadata <- metadata(
+metadata <- hub_metadata(
     Title = "ENCODE",
     Description = "a test entry",
     BiocVersion = "4.1",
@@ -113,7 +109,7 @@ metadata <- metadata(
     Tags = "ENCODE:Homo sapiens"
 )
 
-add_resource(file.path(fl, "/examplePkg"), metadata)
+add_resource(file.path(fl, "examplePkg"), metadata)
 ```
 
 Then if you want to see what the metadata file looks like you can read in the

@@ -128,9 +128,9 @@
 #'
 #' @return None
 #' @examples
-#' metadata()
+#' hub_metadata()
 #'
-#' tst <- metadata(
+#' tst <- hub_metadata(
 #'     Title = "ENCODE",
 #'     Description = "a test entry",
 #'     BiocVersion = package_version("3.9"),
@@ -151,7 +151,7 @@
 #' )
 #'
 #' @export
-metadata <- function(
+hub_metadata <- function(
     Title = character(1),
     Description = character(1),
     BiocVersion = package_version("0.0"),

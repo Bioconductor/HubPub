@@ -10,7 +10,7 @@ test_that("`add_resource()` works",
     expect_identical(dim(meta), c(0L, 17L))
     expect_identical(colnames(meta)[1], "Title")
 
-    metadata <- metadata(
+    metadata <- hub_metadata(
         Title = "ENCODE",
         Description = "a test entry",
         BiocVersion = "4.1",

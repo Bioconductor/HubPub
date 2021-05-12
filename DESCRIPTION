@@ -1,6 +1,6 @@
 Package: HubPub
 Title: Utilities to create and use Bioconductor Hubs
-Version: 0.99.2
+Version: 0.99.3
 Authors@R: c(
     person("Kayla", "Interdonato", email = "kayla.morrell@roswellpark.org",
         role = c("aut", "cre")),
@@ -26,7 +26,7 @@ Suggests: AnnotationHubData,
     knitr,
     rmarkdown,
     BiocStyle,
-biocViews: DataImport, GUI, Infrastructure, Software, ThirdPartyClient
+biocViews: DataImport, Infrastructure, Software, ThirdPartyClient
 BugReports: https://github.com/Bioconductor/HubPub/issues
 Encoding: UTF-8
 LazyData: false

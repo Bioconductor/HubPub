@@ -28,6 +28,6 @@ fields.
 }
 \examples{
 fl <- tempdir()
-create_pkg(file.path(fl, "/tstPkg"), "AnnotationHub")
+create_pkg(file.path(fl, "tstPkg"), "AnnotationHub")
 
 }
