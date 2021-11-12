@@ -46,16 +46,20 @@ create_pkg <- function(package,
     )
 
     if (type == "AnnotationHub") {
-        import <- "AnnotationHubData"
+        import <- "AnnotationHub"
+        suggest <- "AnnotationHubData"
     }
-    else
+    else {
         import <- "ExperimentHub"
+        suggest <- "ExperimentHubData"
+    }
 
     bioc_fields <- list(Version = "0.99.0",
         biocViews = type,
         License = "Artistic-2.0",
         Date = Sys.Date(),
         Imports = import,
+        Suggests = suggest,
         BugReports = paste0("https://support.bioconductor.org/t/", pkg)
     )
 
