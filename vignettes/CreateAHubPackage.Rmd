@@ -1,7 +1,7 @@
 ---
 title: "Creating A Hub Package: ExperimentHub or AnnotationHub"
-author: "Valerie Obenchain and Lori Shepherd"
-date: "Modified: Feb 2021. Compiled: `r format(Sys.Date(), '%d %b %Y')`"
+author: "Valerie Obenchain, Lori Shepherd, and Kayla Interdonato"
+date: "Modified: Nov 2021. Compiled: `r format(Sys.Date(), '%d %b %Y')`"
 output:
   BiocStyle::html_document:
     toc: true
@@ -66,7 +66,8 @@ creating a package. The package should minimally contain the resource metadata,
 man pages describing the resources, and a vignette. It may also contain supporting
 `R` functions the author wants to provide. This is a similar design to the
 existing `Bioconductor` experimental data packages or annotation packages except
-the data is stored in AWS S3 buckets or publicly accessibly sites instead of
+the data is stored in Microsoft Azure Genomic Data Lake or other publicly accessibly
+sites (like Amazon S3 buckets or institutional servers) instead of
 the `data/` or `inst/extdata/` directory of the package. This keeps the package
 light weight and allows users to download only necessary data files.
 
@@ -79,8 +80,8 @@ Below are the steps required for creating the package and adding new resources:
 The man page and vignette examples in the package will not work until
 the data are available in `AnnotationHub` or `ExperimentHub`. If you are not
 hosting the data on a stable web server (github does not suffice), you may use
-the Bioconductor AWS S3 Bucket. Adding the data to AWS S3 and the
-metadata to the production database involves assistance from a `Bioconductor`
+the Bioconductor Microsoft Azure Genomic Data Lake. Adding the data to the Data
+Lake and the metadata to the production database involves assistance from a `Bioconductor`
 team member. The metadata.csv file will have to be created before the data can
 officially be added to the hub (See inst/extdata section below). Please read the
 section on "Storage of Data Files".
@@ -101,8 +102,8 @@ unless otherwise stated.
 
 - `metadata.csv`:
   This file contains the metadata in the format of one row per resource
-  to be added to the Hub database (each row corresponds to one data file on S3 or other
-  publically hosted database). The file should be generated
+  to be added to the Hub database (each row corresponds to one data file
+  uploaded to publically hosted data server). The file should be generated
   from the code in inst/scripts/make-metadata.R where the final data are
   written out with `write.csv(..., row.names=FALSE)`. The required column
   names and data types are specified in
@@ -128,14 +129,15 @@ unless otherwise stated.
   downloaded from, pre-processing, and how the final R object was made. Include
   a description of any steps performed outside of `R` with third party
   software. Output of the script should be files on disk ready to be pushed to
-  S3. If data are to be hosted on a personal web site instead of S3, this file
+  data server. If data are to be hosted on a personal web site instead of
+  Microsoft Azure Genomic Data Lake, this file
   should explain any manipulation of the data prior to hosting on the web
   site. For data hosted on a public web site with no prior manipulation this
   file is not needed. For experimental data objects, it is encouraged to
   serialize Data objects with `save()` with the .rda extension on the filename
   but not strictly necessary. If the data is provided in another format an
   appropriate loading method may need to be implemented. Please advise when
-  reaching out for "Uploading Data to S3". 
+  reaching out for "Uploading Data to Microsoft Azure Genomic Data Lake". 
 
 - `make-metadata.R`:
   A script to make the metadata.csv file located in inst/extdata of the
@@ -260,8 +262,9 @@ and should also contain the term `AnnotationHub`.
 ### Data objects
 
 Data are not formally part of the software package and are stored
-separately in a publicly accessible hosted site or by Bioconductor in an AWS S3
-buckets. The author should read the following section on "Storage of Data Files".
+separately in a publicly accessible hosted site or by Bioconductor on Microsoft
+Genomic Data Lakes. The author should read the following section on "Storage of
+Data Files".
 
 
 ### Confirm Valid Metadata
@@ -277,7 +280,7 @@ warnings or errors.
 
 ### Package review
 
-Once the data are in AWS S3 or public site and the metadata have been added to the
+Once the data are in Genomic Data Lakes or public site and the metadata have been added to the
 production database the man pages and vignette can be finalized. When the
 package passes R CMD build and check it can be submitted to the
 [package tracker](https://github.com/Bioconductor/Contributions) for
@@ -312,7 +315,7 @@ become available.
   lead to confusion.
 
 * Make data available: either on publicly accessible site or see section on
-  "Uploading Data to S3".
+  "Uploading Data to Microsoft Azure Genomic Data Lake".
 
 * Update make-metadata.R with the new metadata information
 
@@ -351,7 +354,7 @@ metadata.csv file is formatted correctly by running
 
 2. Add biocViews term "AnnotationHub" or "ExperimentHub" to DESCRIPTION
 
-3. Upload the data to S3 or place on a publicly accessible site and remove the
+3. Upload the data to data lake or place on a publicly accessible site and remove the
 data from the package. See the section on "Storage of Data Files" below.
 
 4. Once the data is officially added to the hub, update any code to utilize
@@ -376,9 +379,10 @@ A bug fix may involve a change to the metadata, data resource or both.
   be at the same location (path).
 
 * Notify hubs@bioconductor.org that you want to replace the data
-  and make the files available: see section "Uploading Data to S3".
+  and make the files available: see section "Uploading Data to Microsoft Azure
+  Genomic Data Lake".
 
-* If a file is replaced on S3 directly, the old file will no longer be
+* If a file is replaced on the data lake directly, the old file will no longer be
   accessible. This could affect reproducibility of end users' research if the
   old file has already been utilized. This approach should be done with caution.
 
@@ -441,7 +445,7 @@ Versioning of resources is handled by the maintainer. If you plan to provide
 incremental updates to a file for the same organism / genome build, we
 recommend including a version in the title of the resource so it is easy
 to distinguish which is most current. We also would recommend when uploading the
-data to S3 or your publicly accessible site to have a directory structure
+data to genomic data lake or your publicly accessible site to have a directory structure
 accounting for versioning.
 
 If you do not include a version, or make the title unique in some way,
@@ -484,7 +488,7 @@ The data should not be included in the package. This keeps the package light
 weight and quick for a user to install. This allows the user to investigate functions and
 documentation without downloading large data files and only proceeding with the
 download when necessary. There are two options for storing data: Bioconductor
-AWS S3 buckets or hosting the data elsewhere on a publicly accessible site. See
+Microsoft Azure Genomic Data Lake or hosting the data elsewhere on a publicly accessible site. See
 information below and choose the option that fits best for your situation.
 
 ## Hosting Data on a Publicly Accessible Site
@@ -499,63 +503,96 @@ would be `ftp://mylocalserver/` for the `Location_Prefix` and
 `singlecellExperiments/dataSet1.Rds` for the `RDataPath`. Github is not an
 acceptable hosting platform for data.
 
-## Uploading Data to S3
+## Uploading Data to Microsoft Azure Genomic Data Lake
 
 Instead of providing the data files via dropbox, ftp, github, etc. we will grant
-temporary access to an S3 bucket where you can upload your data. Please
-email hubs@bioconductor.org for access.
-
-You will be given access to the 'AnnotationContributor' user. Ensure that the
-`AWS CLI` is installed on your machine. See instructions for installing `AWS
-CLI` [here](https://aws.amazon.com/cli/). Once you  have requested access you
-will be emailed a set of keys. There are two options to set the profile up for
-AnnotationContributor (see [here](https://docs.aws.amazon.com/cli/latest/userguide/cli-configure-files.html) for more information):
-
-1.  Update your `.aws/credentials` file (most likely located under your home 
-directory) to include the following (updating the keys accordingly):
-
-```
-[AnnotationContributor]
-aws_access_key_id = ****
-aws_secret_access_key = ****
-```
-
-Also update your `.aws/config` file to include
-
-```
-[profile AnnotationContributor]
-output = text
-region = us-east-1
-```
-
-2. If you can't find the `.aws/config` or `.aws/credentials` files,  
-run the following command entering appropriate information from above.
-
-```
-aws configure --profile AnnotationContributor
-```
-
-After the configuration is set you should be able to upload resources using
-
-```
-# To upload a full directory use recursive:
-
-aws --profile AnnotationContributor s3 cp test_dir s3://annotation-contributor/test_dir --recursive --acl public-read
-
-# To upload a single file
-
-aws --profile AnnotationContributor s3 cp test_file.txt s3://annotation-contributor/test_file.txt --acl public-read
-
-```
+temporary access to temporary data lakes directory where you can upload your data. Please
+email hubs@bioconductor.org to obtain a SAS token for identification. 
 
 Please upload the data with the appropriate directory structure, including
 subdirectories as necessary (i.e. top directory must be software package name,
-then if applicable, subdirectories of versions, ...).  Please also do not forget
-to use the flag `--acl public-read`; This allows read access to the data file. 
+then if applicable, subdirectories of versions, ...).   
 
 Once the upload is complete, email hubs@bioconductor.org to continue the
 process. To add the data officially the data will need to be uploaded and the
 metadata.csv file will need to be created in the github repository.
+
+There are a few different options users have for connecting to Microsoft Azure
+Genomic Data Lake to upload data. All require obtaining either a SAS token or
+SAS URL from the Bioconductor Core Team by emailing hubs@bioconductor.org. In
+the examples below if the token is used, please insert provided sas token for <sas
+token>; similarly if the sas url is used, please insert provided sas url for
+<sas url>. 
+
+
+### Command Line via azcopy
+
+The command line interface for upload is through azcopy. Download [Microsoft
+azcopy](https://docs.microsoft.com/en-us/azure/storage/common/storage-use-azcopy-v10)
+and unzip/untar. You can choose to add the location of the azcopy executable
+file on your computer system PATH so that it can be found anywhere otherwise the
+following examples of utilizing azcopy should include the full path location
+where the file was unzip/untar. If the directory of data on your system is
+called MyPackageData, the following command would upload the directory:
+
+```
+azcopy --recursive MyPackageData <sas url>
+```
+
+
+### GUI Interface with Azure Storage Explorer
+
+For a GUI like experience for uploading data, download the [Microsoft Azure
+Storage
+Explorer](https://docs.microsoft.com/en-us/azure/vs-azure-tools-storage-manage-with-storage-explorer?tabs=macos#overview). 
+
+
+### R Interace with R package AzureStor
+
+There is a way to upload data through the R package AzureStor and avoid having
+to download anything directly on your computer. Most of the documentation here is an
+adaption of the provided README and documentation provided through the AzureStor
+package and [AzureStor Github](https://github.com/Azure/AzureStor). 
+
+
+Open R and load the AzureStor package provided through CRAN:
+
+
+```
+if (!requireNamespace("AzureStor", quietly = TRUE))
+    install.packages("AzureStor")
+
+library("AzureStor")
+```
+
+You will need to connect to the temporary storage location with provided sas credentials:
+
+```
+sas = <sas token>
+url = "https://bioconductorhubs.blob.core.windows.net"
+ep = storage_endpoint(url, sas = sas)
+container = storage_container(ep, "staginghub")
+```
+
+Now the command to upload will depend on if your data is currently stored
+locally or in a remote location.
+
+For locally available data use `storage_multiupload`. If your data files are in
+a local path `/home/user/mypackage/data` and assuming the name of your package
+is `mypackage` then you would use the following call:
+
+```
+storage_multiupload(container, src = "/home/user/mypackage/data/*", dest = "mypackage", recursive=TRUE)
+```
+Please make sure the `dest` value is the name of your package you will be submitting.
+
+For data that is currently being stored remotely, use `copy_url_to_storage` or `multicopy_url_to_storage`.
+
+
+### Utilizing the Bioconductor Docker container
+
+coming soon!
+
 
 # Validating
 
@@ -575,7 +612,7 @@ need to be created before the data can be added to the database. To ensure
 proper formatting one should run `AnnotationHubData::makeAnnotationHubMetadata`
 or `ExperimentHubData::makeExperimentHubMetadata`
 on the package with any/all metadata files, and address any ERRORs that
-occur. Each data object uploaded to S3 should have an entry (row) in the metadata
+occur. Each data object uploaded to data server should have an entry (row) in the metadata
 file. Briefly, a description of the metadata columns required:
 
 * Title: 'character(1)'. Name of the resource. This can be the exact file name
@@ -620,9 +657,9 @@ file. Briefly, a description of the metadata columns required:
   instead of trying to load the file into R, will only return the path to the
   locally downloaded file.
 * Location_Prefix: 'character(1)'. **Do not** include this field if data are stored
-  in the Bioconductor AWS S3; it will be generated automatically. If data will
-  be accessed from a location other than AWS S3 this field should be the base
-  url.
+  in the Bioconductor Data Lake; it will be generated automatically. If data will
+  be accessed from a location other than Bioconductor's Microsoft Data Lake
+  location,  this field should be the base url.
 * RDataPath: 'character(1)'.This field should be the remainder of the path to
   the resource. The 'Location_Prefix' will be prepended to 'RDataPath' for the
   full path to the resource.  If the resource is stored in Bioconductor's AWS S3
@@ -641,10 +678,10 @@ Any additional columns in the metadata.csv file will be ignored but could be
 included for internal reference.
 
 More on Location_Prefix and RDataPath. These two fields make up the complete
-file path url for downloading the data file. If using the Bioconductor AWS S3 bucket the
-Location_Prefix should not be included in the metadata file[s] as this field
+file path url for downloading the data file. If using the Bioconductor Microsoft
+Azure Genomic Data Lake the Location_Prefix should not be included in the metadata file[s] as this field
 will be populated automatically.  The RDataPath will be the directory structure
-you uploaded to S3. If you uploaded a directory `MyAnnotation/`, and that
+you uploaded to the Data Lake. If you uploaded a directory `MyAnnotation/`, and that
 directory had a subdirectory `v1/` that contained two files `counts.rds` and
 `coldata.rds`, your metadata file will contain two rows and the RDataPaths would
 be `MyAnnotation/v1/counts.rds` and `MyAnnotation/v1/coldata.rds`.  If you
@@ -658,7 +695,7 @@ the `RDataPath` would be `biostats/project2/counts.rds`.
 This is a bad example because these annotations are already in the hubs but it
 should give you an idea of the format for AnnotationHub. Let's say I have a package myAnnotations
 and I upload two annotation files for dog and cow with information extracted from
-ensembl to S3.  You would want the following saved as a csv (comma seperated output)
+ensembl to Bioconductor's Data Lake location.  You would want the following saved as a csv (comma seperated output)
 but for easier view we show in a table:
 
 
