@@ -568,8 +568,38 @@ storage_multiupload(container, src=src, dest=dest)
 ```
 Please make sure the `dest` value starts with the name of your package.
 
-For data that is currently being stored remotely, see `copy_url_to_storage` or
-`multicopy_url_to_storage`.
+For data that is currently being stored remotely (github, dropbox, ftp, etc),
+use `copy_url_to_storage` or `multicopy_url_to_storage`. As an example, say the
+data is store on a public github repository at `MyGithub/MyPackage`, in a
+package like directory strucutre where the data is in a data directory. 
+
+```
+library(httr)
+
+# get the list of files for the repository
+response <- GET("https://api.github.com/repos/MyGithub/MyPackage/git/trees/master?recursive=1")
+
+# get the blob urls and file names
+src <- sapply(content(response)$tree, function(elt) elt$url)
+names <- sapply(content(response)$tree, function(elt) elt$path)
+
+# filter for the files in the data directory
+keep <- grepl("^data/", names)
+src <- src[keep]
+names <- names[keep]
+
+# we want the data in a directory with the package name
+# the data should only have relevant subdirectories
+dest = paste0("MyPackage/", gsub("data/","",names))
+
+# upload to azure
+multicopy_url_to_storage(container, src=src, dest=dest,
+                         max_concurrent_transfers=3)
+
+```
+Keep in mind that github has rate limiting factors. If you have reached a max
+rate, you might get an error `rate limit exceeded`. You would have to check your
+upload to see what uploaded correctly and what is missing.
 
 
 ### Command Line via azcopy
@@ -672,6 +702,33 @@ entire package directory (i.e DESCRIPTION, NAMESPACE, R/, etc.)
 ![](StorageExplorerScreenShots/UploadFiles.png)
 
 
+Troubleshooting GUI
+
+If the connection window did not appear automatically on opening there are a few
+common issues that might be the cause.
+
+If you know you are not logged into a session, you can click on what looks like
+a outlet plug to launch the resource connection windows (see beginning of GUI section)
+
+If you have already logged in and are still connected with a valid, non-expired
+SAS, you can naviage directly to the storage container using the left navigation
+pane.
+
+  1. Click on `Local & Attached` to expand.
+  
+  2. Click on `Storage Accounts` to expand.
+
+  3. Click on `Attached Containers` to expand.
+
+  4. Click on `Blob Containers` to expand.
+
+  5. You should see the attached `staginghub`. If you click on it should be
+  accessible. If you get an error about connection authentication or at the
+  bottom left in the properties for `Shared Access Signature` it says expired,
+  you will have to detach the session and login with a valid SAS URL. To detach,
+  right click on the `staginghub` in the explorer section and select
+  `detach`. In the pop up for verification click "Yes". Relogin with a valid SAS
+  URL by clicking on the picture that looks like an outlet plug in the far. 
 
 
 ### Utilizing the Bioconductor Docker container
