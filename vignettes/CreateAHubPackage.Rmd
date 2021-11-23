@@ -547,10 +547,10 @@ library("AzureStor")
 You will need to connect to the temporary storage location with provided sas credentials:
 
 ```
-sas = <sas token>
-url = "https://bioconductorhubs.blob.core.windows.net"
-ep = storage_endpoint(url, sas = sas)
-container = storage_container(ep, "staginghub")
+sas <- <sas token>
+url <- "https://bioconductorhubs.blob.core.windows.net"
+ep <- storage_endpoint(url, sas = sas)
+container <- storage_container(ep, "staginghub")
 ```
 
 Now the command to upload will depend on if your data is currently stored
@@ -560,8 +560,13 @@ For locally available data use `storage_multiupload`. If your data files are in
 a local path `/home/user/mypackage/data` and assuming the name of your package
 is `mypackage` then you would use something like the following call:
 
-
-
+```
+files <- dir("/home/user/mypackage/data", recursive=TRUE)
+src <- dir("/home/user/mypackage/data", recursive=TRUE, full.names=TRUE)
+dest <- paste0("mypackage/", files)
+storage_multiupload(container, src=src, dest=dest)
+```
+Please make sure the `dest` value starts with the name of your package.
 
 For data that is currently being stored remotely, see `copy_url_to_storage` or
 `multicopy_url_to_storage`.
@@ -614,9 +619,10 @@ steps.
 
 
 
-![SelectBlobContainer](StorageExplorerScreenShots/SelectBlobContainer.png)
-
-
+![](StorageExplorerScreenShots/SelectBlobContainer.png)
+![](StorageExplorerScreenShots/SelectSASAuth.png)
+![](StorageExplorerScreenShots/InsertSASurl.png)
+![](StorageExplorerScreenShots/Connect.png)
 
 
 
@@ -661,6 +667,9 @@ entire package directory (i.e DESCRIPTION, NAMESPACE, R/, etc.)
      + Choose Upload in the bottom right
 
 
+![](StorageExplorerScreenShots/Upload.png)
+![](StorageExplorerScreenShots/UploadFolder.png)
+![](StorageExplorerScreenShots/UploadFiles.png)
 
 
 
