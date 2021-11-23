@@ -558,16 +558,12 @@ locally or in a remote location.
 
 For locally available data use `storage_multiupload`. If your data files are in
 a local path `/home/user/mypackage/data` and assuming the name of your package
-is `mypackage` then you would use the following call:
+is `mypackage` then you would use something like the following call:
 
-```
-storage_multiupload(container, src = "/home/user/mypackage/data/*", dest = "mypackage", recursive=TRUE)
-```
-Please make sure the `dest` value is the name of your package you will be
-submitting. Subdirectories, if utilized, should upload automatically by using `*`
-in combination with `recursive=TRUE`. 
 
-For data that is currently being stored remotely, use `copy_url_to_storage` or
+
+
+For data that is currently being stored remotely, see `copy_url_to_storage` or
 `multicopy_url_to_storage`.
 
 
@@ -597,7 +593,7 @@ Storage
 Explorer](https://docs.microsoft.com/en-us/azure/vs-azure-tools-storage-manage-with-storage-explorer?tabs=macos#overview). 
 
 Once Installed, open the storage explorer and follow the following
-steps. Screenshots provided after.
+steps.
 
   1. The `Select Resource` window should automatically appear : select `Blob
   Container`. If the windows does not automatically appear, see Troubleshooting
@@ -615,7 +611,15 @@ steps. Screenshots provided after.
   
   4. On the `Summary` window, verify and click Connect in the bottom right
   corner.
-  
+
+
+
+![SelectBlobContainer](StorageExplorerScreenShots/SelectBlobContainer.png)
+
+
+
+
+
 You should now see a GUI version of the storage container. `staginghub` is the
 temporary location to upload data. This is a shared location and there may be
 other users data folders located here that are visible to you.  Your SAS token
@@ -655,10 +659,6 @@ entire package directory (i.e DESCRIPTION, NAMESPACE, R/, etc.)
      + Change the Destination directory to your package name.
 
      + Choose Upload in the bottom right
-
-
-
-![SelectBlobContainer](StorageExplorerScreenShots/SelectBlobContainer.png)
 
 
 
