@@ -641,7 +641,7 @@ steps.
   URL (SAS)` and click Next in the bottom right corner.
   
   3. In the `Enter Connection Info` window, Type `stainghub` into the Display
-  name. And insert the give <sas url> into the Blob container SAS URL
+  name. And insert the given <sas url> into the Blob container SAS URL
   field. Then click Next in the bottom right corner.
   
   4. On the `Summary` window, verify and click Connect in the bottom right
@@ -708,7 +708,8 @@ If the connection window did not appear automatically on opening there are a few
 common issues that might be the cause.
 
 If you know you are not logged into a session, you can click on what looks like
-a outlet plug to launch the resource connection windows (see beginning of GUI section)
+a outlet plug on the far left to launch the resource connection windows (the see 
+beginning of GUI section for connecting to resource)
 
 If you have already logged in and are still connected with a valid, non-expired
 SAS, you can naviage directly to the storage container using the left navigation
@@ -728,7 +729,7 @@ pane.
   you will have to detach the session and login with a valid SAS URL. To detach,
   right click on the `staginghub` in the explorer section and select
   `detach`. In the pop up for verification click "Yes". Relogin with a valid SAS
-  URL by clicking on the picture that looks like an outlet plug in the far. 
+  URL by clicking on the picture that looks like an outlet plug in the far left. 
 
 
 ### Utilizing the Bioconductor Docker container
