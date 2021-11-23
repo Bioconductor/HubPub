@@ -567,7 +567,8 @@ Please make sure the `dest` value is the name of your package you will be
 submitting. Subdirectories, if utilized, should upload automatically by using `*`
 in combination with `recursive=TRUE`. 
 
-For data that is currently being stored remotely, use `copy_url_to_storage` or `multicopy_url_to_storage`.
+For data that is currently being stored remotely, use `copy_url_to_storage` or
+`multicopy_url_to_storage`.
 
 
 ### Command Line via azcopy
@@ -595,24 +596,26 @@ For a GUI like experience for uploading data, download the [Microsoft Azure
 Storage
 Explorer](https://docs.microsoft.com/en-us/azure/vs-azure-tools-storage-manage-with-storage-explorer?tabs=macos#overview). 
 
-Once Installed, open the storage explorer and follow the following steps.
+Once Installed, open the storage explorer and follow the following
+steps. Screenshots provided after.
 
-     1. The `Select Resource` window should automatically appear : select `Blob
-     Container`. If the windows does not automatically appear, see
-     Troubleshooting GUI at the bottom of this section for instructions on how
-     to make this window appear, how to navigate if already logged in with a
-     valid, non-expired sas token, and what to do if your sas token has expired.
+  1. The `Select Resource` window should automatically appear : select `Blob
+  Container`. If the windows does not automatically appear, see Troubleshooting
+  GUI at the bottom of this section for instructions on how to make this window
+  appear, how to navigate if already logged in with a valid, non-expired sas
+  token, and what to do if your sas token has expired or seeing an older login
+  displaying without access.
 
-     2. In the `Select Connection Method` window, select `Shared access
-     signature URL (SAS)` and click Next in the bottom right corner.
-
-     3. In the `Enter Connection Info` window, Type `stainghub` into the Display
-     name. And insert the give <sas url> into the Blob container SAS URL
-     field. Then click Next in the bottom right corner.
-
-     4. On the `Summary` window, verify and click Connect in the bottom right
-     corner.
-
+  2. In the `Select Connection Method` window, select `Shared access signature
+  URL (SAS)` and click Next in the bottom right corner.
+  
+  3. In the `Enter Connection Info` window, Type `stainghub` into the Display
+  name. And insert the give <sas url> into the Blob container SAS URL
+  field. Then click Next in the bottom right corner.
+  
+  4. On the `Summary` window, verify and click Connect in the bottom right
+  corner.
+  
 You should now see a GUI version of the storage container. `staginghub` is the
 temporary location to upload data. This is a shared location and there may be
 other users data folders located here that are visible to you.  Your SAS token
@@ -623,9 +626,39 @@ subdirectories are optionally okay to include to distguish versions or
 characteristics of the data (i.e species, tissue types). Do not upload your
 entire package directory (i.e DESCRIPTION, NAMESPACE, R/, etc.)
 
+  1. If your data is already is a directory with your package name, Use the
+  upload folder option. Uploading a Folder will automatically upload any
+  subdirectories if utilized.
+  
+     + Choose `Upload` in the top left and select `Upload Folder` 
+
+     + Navigate to the appropriate folder on your local file system in the
+     `Selected folder` field.
+     
+     + Select `Block blob` as the Blob type.
+
+     + Leave the Destination directory as `/`
+
+     + Choose Upload in the bottom right
 
 
 
+  2. If your data is not in a directory with your package name:
+
+     +  Choose `Upload` in the top left and select `Upload Files`
+
+     + Navigate to and select the appropriate files on your local file
+     system. This option will not allow you to select at subdirectories or folders, only files.
+
+     + Select `Block blob` as the Blob type.
+
+     + Change the Destination directory to your package name.
+
+     + Choose Upload in the bottom right
+
+
+
+![SelectBlobContainer](StorageExplorerScreenShots/SelectBlobContainer.png)
 
 
 
