@@ -1,2 +1,5 @@
+Changes in version 1.3.0 (2021-11-24)
++ Update CreateAHubPackageVignette to use Azure instead of AWS
+
 Changes in version 0.99.0 (2021-04-23)
 + Submitted to Bioconductor
