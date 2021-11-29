@@ -613,7 +613,7 @@ where the file was unzip/untar. If the directory of data on your system is
 called MyPackageData, the following command would upload the directory:
 
 ```
-azcopy --recursive MyPackageData <sas url>
+azcopy copy --recursive MyPackageData <sas url>
 ```
 All files should be in a folder that matches your package name. Only upload data files;
 subdirectories are optionally okay to include to distguish versions or
