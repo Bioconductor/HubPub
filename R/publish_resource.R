@@ -1,63 +1,86 @@
-#' A function that publishes resource to the hub S3 bucket
+#' @importFrom AzureStor storage_endpoint, storage_container
+#' @noRd
+.sas_credentials <- function(token)
+{
+    sas <- token
+    url <- "https://bioconductorhubs.blob.core.windows.net"
+    ep <- storage_endpoint(url, sas = sas)
+    container <- storage_container(ep, "staginghub")
+
+    creds <- list("token" = sas, "url" = url, "ep" = ep, "container" = container)
+    return(creds)
+}
+#' Functions to publish resource(s) to Microsoft Azure Genomic Data Lake
+#' 
+#' @name publish_resource
+#' @rdname publish_resource
+#' 
+#' These functions utilize the AzureStor package to upload local or remote data 
+#' to the Bioconductor's temporary data lakes directory. The user should have 
+#' already contacted the hubs maintainers at hubs@bioconductor.org to get the 
+#' necessary SAS token or SAS URL to be able to upload data. 
 #'
-#' This function uses functionality from the aws.s3 package to put files or 
-#' directories on the Bioconductor's test hub S3 bucket. The user should have 
-#' already contacted the hubs maintainers at hubs@bioconductor.org to get 
-#' the necessary credentials to access the bucket. These credentials should be 
-#' delcared in the system environment prior to running this function.
-#'
-#' @param path A `character(1)` path to the file or the name of the directory 
-#'     to be added to the bucket. If adding a directory, be sure there are no 
-#'     nested directories and only files within it.
-#' @param object A `character(1)` to indicate how the file should be named on 
-#'     the bucket.
+#' @param token A `character(1)` SAS token provided by the Bioconductor hubs 
+#'     maintainers. 
+#' @param path A `character(1)` path to the data to be uploaded.  
+#' @param pkgName A `character(1)` name of the package the data will be 
+#'     associated with.
 #' @param dry.run A boolean to indicate if the resource should in fact be 
 #'     published. The defalut is TRUE, meaning the resource won't be published.
 #'
-#' @importFrom aws.s3 put_object put_folder
-#' @importFrom fs is_file
-#' @importFrom utils write.csv
+#' @importFrom AzureStor storage_multiupload
 #'
 #' @return None 
 #'
 #' @export
 #'
 #' @examples
-#' pkgdir <- tempfile()
-#' fl1 <- file.path(pkgdir, "mtcars1.csv")
-#' dir.create(dirname(fl1), recursive = TRUE)
-#' write.csv(mtcars, file = file.path(fl1))
-#' fl2 <- file.path(pkgdir, "mtcars2.csv")
-#' write.csv(mtcars, file = file.path(fl2))
-#' publish_resource(pkgdir, "test_dir")
-#'
-#' fl3 <- file.path(pkgdir, "mtcars3.csv")
-#' write.csv(mtcars, file = file.path(fl3))
-#' publish_resource(fl3, "test_dir")
-publish_resource <- function(path, object, dry.run = TRUE)
+publish_local_resource <- function(token, path, pkgName, dry.run = TRUE)
 {
-    vars <- c("AWS_DEFAULT_OUTPUT", "AWS_DEFAULT_REGION", "AWS_ACCESS_KEY_ID", "AWS_SECRET_ACCESS_KEY")
-    if (!all(nzchar(Sys.getenv(vars)))) {
-        warning("Not all system environment variables are set, do so and rerun function.")
-        dry.run = TRUE
+    creds <- .sas_credentials(token)
+
+    files <- dir(path, recursive = TRUE)
+    src <- dir(path, recursive = TRUE, full.names = TRUE)
+    dest <- paste0(pkgName, "/", files)
+
+    if (dry.run) {
+        message("copy '", files,"' to '", creds$container,"'")
+    } else {
+        storage_multiupload(creds$container, src = src, dest = dest)     
     }
-    
-    if (!is_file(path))
-        objects <- list.files(path, full.names = TRUE)
-    else 
-        objects <- path
-    sapply(objects, function(f) {
-        object = paste0(object, "/", basename(f))
-        if (dry.run) {
-            to <- paste0("s3://annotation-contributor/", object)
-            message("copy '",f,"' to '", to,"'")
-        } else {
-            put_object(
-                file = f,
-                object = object,
-                bucket = "annotation-contributor",
-                acl = "public-read"
-            )
-        }
-    })
+}
+
+#' @rdname publish_resource
+#' 
+#' @param 
+#' 
+#' @importFrom httr GET, content
+#' @importFrom AzureStor multicopy_url_to_storage
+#' 
+#' @return None
+#' 
+#' @export
+#' 
+#' @examples
+publish_remote_resource <- function(token, remotePath, dry.run = TRUE)
+{
+    creds <- .sas_credentials(token)
+
+    response <- GET(remotePath)
+
+    src <- sapply(content(response)$tree, function(elt) elt$url)
+    names <- sapply(content(response)$tree, function(elt) elt$path)
+
+    keep <- grepl("^data/", names)
+    src <- src[keep]
+    names <- names[keep]
+
+    dest <- paste0(pkgName, gsub("data/", "", names))
+
+    if (dry.run) {
+        message("copy '", names,"' to '", creds$container,"'")
+    } else {
+        multicopy_url_to_storage(creds$container, src = src, dest = dest, 
+            max_concurrent_transfers = 3)
+    }
 }
