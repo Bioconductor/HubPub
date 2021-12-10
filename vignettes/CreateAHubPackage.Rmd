@@ -584,6 +584,8 @@ src <- sapply(content(response)$tree, function(elt) elt$url)
 names <- sapply(content(response)$tree, function(elt) elt$path)
 
 # filter for the files in the data directory
+# if you are uploaded subdirectories filter out the github blob for the
+# directory name, subdirectories will be created automatically
 keep <- grepl("^data/", names)
 src <- src[keep]
 names <- names[keep]
@@ -593,13 +595,27 @@ names <- names[keep]
 dest = paste0("MyPackage/", gsub("data/","",names))
 
 # upload to azure
-multicopy_url_to_storage(container, src=src, dest=dest,
-                         max_concurrent_transfers=3)
+multicopy_url_to_storage(container, src=src, dest=dest)
 
 ```
 Keep in mind that github has rate limiting factors. If you have reached a max
 rate, you might get an error `rate limit exceeded`. You would have to check your
-upload to see what uploaded correctly and what is missing.
+upload to see what uploaded correctly and what is missing. You can also use the
+argument max_concurrent_transfers to lower the transfer rate. 
+
+If you are using AzureStor version > 3.5.2.9000, you have the option of passing
+an authentication header into the multicopy_url_to_storage function. For github,
+you would pass a [generated Personal Access Token
+(PAT)](https://docs.github.com/en/authentication/keeping-your-account-and-data-secure/creating-a-personal-access-token)
+with repo level access.
+
+```
+token = <github PAT>
+auth_header = paste("token", token)
+multicopy_url_to_storage(container, src=src, dest=dest, auth_header = auth_header)
+```
+
+This allows for secure access and will increase the maximum rate github allows.
 
 
 ### Command Line via azcopy
