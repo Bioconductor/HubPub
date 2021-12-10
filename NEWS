@@ -1,2 +1,8 @@
+Changes in version 1.2.4
++ Updated AzureStor instructions for auth_header
+
+Changes in version 1.2.2
++ Updated vignette for uploading data from AWS to Azure
+
 Changes in version 0.99.0 (2021-04-23)
 + Submitted to Bioconductor
