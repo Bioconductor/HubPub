@@ -13,7 +13,7 @@ test_that("`create_pkg()` works",
 
     sugs <- unname(dsc[,"Suggests"])
     sugs_split <- unlist(strsplit(sugs, "\n"))
-    expect_identical(sugs_split[2], "AnnotationHubData")
+    expect_identical(sugs_split[1], "AnnotationHubData,")
 
     create_pkg(paste0(fl, "/tstEHPkg"), "ExperimentHub")
 
@@ -25,7 +25,7 @@ test_that("`create_pkg()` works",
 
     sugs2 <- unname(dsc2[,"Suggests"])
     sugs2_split <- unlist(strsplit(sugs2, "\n"))
-    expect_identical(sugs2_split[2], "ExperimentHubData")
+    expect_identical(sugs2_split[1], "ExperimentHubData,")
 
     expect_error(create_pkg())
     expect_error(create_pkg(paste0(fl, "/tstAHPkg")))
