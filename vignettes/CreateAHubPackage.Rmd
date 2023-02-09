@@ -526,7 +526,7 @@ token>; similarly if the sas url is used, please insert provided sas url for
 
 
 
-### R Interace with R package AzureStor
+### R Interface with R package AzureStor
 
 There is a way to upload data through the R package AzureStor and avoid having
 to download anything directly on your computer. Most of the documentation here is an
