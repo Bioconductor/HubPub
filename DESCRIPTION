@@ -1,6 +1,6 @@
 Package: HubPub
 Title: Utilities to create and use Bioconductor Hubs
-Version: 1.7.0
+Version: 1.7.1
 Authors@R: c(
     person("Kayla", "Interdonato", email = "kayla.morrell@roswellpark.org",
         role = c("aut", "cre")),
