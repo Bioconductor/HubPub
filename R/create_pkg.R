@@ -71,7 +71,7 @@ create_pkg <- function(package,
     }
 
     usethis::use_template("pkg-package.R",
-        save_as = paste0("/R/",pkg,"-package.R"),
+        save_as = paste0("R/",pkg,"-package.R"),
         data = list(package = pkg),
         package = "HubPub")
 
@@ -80,15 +80,15 @@ create_pkg <- function(package,
 
     usethis::use_directory("inst/scripts")
     usethis::use_template("make-data.R",
-        save_as = "/inst/scripts/make-data.R",
+        save_as = "inst/scripts/make-data.R",
         package = "HubPub")
     usethis::use_template("make-metadata.R",
-        save_as = "/inst/scripts/make-metadata.R",
+        save_as = "inst/scripts/make-metadata.R",
         package = "HubPub")
 
     if (type == "ExperimentHub")
         usethis::use_template("zzz.R",
-            save_as = "/R/zzz.R",
+            save_as = "R/zzz.R",
             package = "HubPub")
 
     usethis::use_directory("inst/extdata")
@@ -97,7 +97,7 @@ create_pkg <- function(package,
 
     usethis::use_testthat()
     usethis::use_template("test_metadata.R",
-        save_as = "/tests/testthat/test_metadata.R",
+        save_as = "tests/testthat/test_metadata.R",
         data = list(type = type, package = pkg),
         package = "HubPub")
 
