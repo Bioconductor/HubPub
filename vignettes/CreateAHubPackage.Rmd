@@ -109,8 +109,8 @@ unless otherwise stated.
   names and data types are specified in
   `ExperimentHubData::makeExperimentHubMetadata` or
   `AnnotationHubData::makeAnnotationHubMetadata`. See
-  ?`ExperimentHubData::makeExperimentHubMetadata` or
-  ?`AnnotationHubData::makeAnnotationHubMetadata` for details.
+  `?ExperimentHubData::makeExperimentHubMetadata` or
+  `?AnnotationHubData::makeAnnotationHubMetadata` for details.
   Ensuring that the above function runs without ERROR is also a validation step
   for the metadata file.
 
@@ -141,8 +141,8 @@ unless otherwise stated.
 
 - `make-metadata.R`:
   A script to make the metadata.csv file located in inst/extdata of the
-  package. See ?`ExperimentHubData::makeExperimentHubMetadata` or
-  ?`AnnotationHubData::makeAnnotationHubMetadata` for a description of expected
+  package. See `?ExperimentHubData::makeExperimentHubMetadata` or
+  `?AnnotationHubData::makeAnnotationHubMetadata` for a description of expected
   fields and data types. The `ExperimentHubData::makeExperimentHubMetadata()` or
   `AnnotationHubData::makeAnnotationHubMetadata()` can be used to validate the
   metadata.csv file before submitting the package.
@@ -273,9 +273,9 @@ When you are satisfied with the representation of your resources in
 your metadata.csv (or other aptly named csv file) the `Bioconductor` team
 member will add the metadata to the production database. Confirm the metadata
 csv files in inst/extdata/ are valid by by running either
-ExperimentHubData::makeExperimentHubMetadata() or
-AnnotationHubData::makeAnnotationHubData() on your package. Please address any
-warnings or errors.
+`ExperimentHubData::makeExperimentHubMetadata()` or
+`AnnotationHubData::makeAnnotationHubData()` on your package. Please address
+any warnings or errors.
 
 
 ### Package review
