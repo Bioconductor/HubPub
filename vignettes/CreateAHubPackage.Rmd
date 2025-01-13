@@ -543,7 +543,7 @@ team:
 
 1. username: hubtest1
 2. key: 102da5beeebe1339ef50dd9138589d8e46a354d1ad69a7b909f165d265f38a33
-3. core team bucket name: UploadDir
+3. core team bucket name: userdata
 
 To set up credentials on your system you would use the command
 `aws configure --profile <username>`. It will take you through prompts for AWS
@@ -559,7 +559,7 @@ Default output format: <leave blank>
 
 ```
 
-You would then be able to access the UploadDir that was set up for you. You can
+You would then be able to access the userdata that was set up for you. You can
 use `s3 cp` to upload data. Use with recursive to upload directories. The
 general form will be
 
@@ -575,7 +575,7 @@ So using our example data:
 aws --profile hubtest1
 --endpoint-url https://hubtest1.hubsingest.bioconductor.org/
 s3 cp --recursive /path/to/YourLocalDataDir
-s3://UploadDir/YourLocalDataDir
+s3://userdata/YourLocalDataDir
 
 ```
 
@@ -585,7 +585,7 @@ something like
 ```
 aws --profile hubtest1
 --endpoint-url https://hubtest1.hubsingest.bioconductor.org/
-s3 ls --recursive s3://UploadDir/
+s3 ls --recursive s3://userdata/
 ```
 
 
