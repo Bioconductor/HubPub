@@ -1,7 +1,7 @@
 ---
 title: "Creating A Hub Package: ExperimentHub or AnnotationHub"
 author: "Valerie Obenchain, Lori Shepherd, and Kayla Interdonato"
-date: "Modified: Nov 2021. Compiled: `r format(Sys.Date(), '%d %b %Y')`"
+date: "Modified: Jan 2025. Compiled: `r format(Sys.Date(), '%d %b %Y')`"
 output:
   BiocStyle::html_document:
     toc: true
@@ -79,12 +79,15 @@ Below are the steps required for creating the package and adding new resources:
 
 The man page and vignette examples in the package will not work until
 the data are available in `AnnotationHub` or `ExperimentHub`. If you are not
-hosting the data on a stable web server (github does not suffice), you may use
-the Bioconductor Microsoft Azure Genomic Data Lake. Adding the data to the Data
-Lake and the metadata to the production database involves assistance from a `Bioconductor`
-team member. The metadata.csv file will have to be created before the data can
-officially be added to the hub (See inst/extdata section below). Please read the
-section on "Storage of Data Files".
+hosting the data on a stable web server (github and dropbox does not suffice), you should
+look into a stable option. We highly recommend zenodo; other options can
+include cloudflare, S3 buckets, mircorsoft azure data lake, or an institutional
+level server. If you do not have access to a secure location, you can reach out
+to `Bioconductor` team member to discuss at hubs@bioconductor.org. Adding data
+to the live location will also require reaching out to hubs@bioconductor.org. To
+have the data live in the appropriate hub, the metadata.csv file will have to be
+created (See inst/extdata section below) and the description file of the package
+will need to be accurate. 
 
 ### Building the package
 
@@ -261,10 +264,8 @@ and should also contain the term `AnnotationHub`.
 
 ### Data objects
 
-Data are not formally part of the software package and are stored
-separately in a publicly accessible hosted site or by Bioconductor on Microsoft
-Genomic Data Lakes. The author should read the following section on "Storage of
-Data Files".
+Large data are not formally part of the software package and are stored separately in
+a publicly accessible hosted site.
 
 
 ### Confirm Valid Metadata
@@ -280,7 +281,7 @@ warnings or errors.
 
 ### Package review
 
-Once the data are in Genomic Data Lakes or public site and the metadata have been added to the
+Once the  metadata have been added to the
 production database the man pages and vignette can be finalized. When the
 package passes R CMD build and check it can be submitted to the
 [package tracker](https://github.com/Bioconductor/Contributions) for
@@ -304,7 +305,7 @@ issue](https://github.com/Bioconductor/Contributions#submitting-related-packages
 ## Additional resources to existing Hub package
 
 Metadata for new versions of the data can be added to the same package as they
-become available.
+become available. 
 
 * The titles for the new versions should be unique and not match the title of
   any resource currently in the Hub. Good practice would be to
@@ -312,10 +313,10 @@ become available.
   not unique, the `AnnotationHub` or `ExperimentHub` object will list multiple
   files with the same title. The user will need to use 'rdatadateadded' to
   determine which is the most current or infer from the id numbers which could
-  lead to confusion.
+  lead to confusion. Let the core team member know if any previously available
+  version should be "removed" by adding a 'rdatadateremoved'. 
 
-* Make data available: either on publicly accessible site or see section on
-  "Uploading Data to Microsoft Azure Genomic Data Lake".
+* Make data available on a publicly accessible site.
 
 * Update make-metadata.R with the new metadata information
 
@@ -323,7 +324,8 @@ become available.
   metadata for all versions of the data in ExperimentHub or AnnotationHub so the
   old file should remain.  When adding a new version it might be helpful to
   write a new csv file named by version, e.g., metadata_v84.csv, metadata_85.csv
-  etc.
+  etc. If using a single metadata.csv file, please add new or updated entries to
+  the end of the file.
   
 * Bump package version and commit to git
 
@@ -354,8 +356,8 @@ metadata.csv file is formatted correctly by running
 
 2. Add biocViews term "AnnotationHub" or "ExperimentHub" to DESCRIPTION
 
-3. Upload the data to data lake or place on a publicly accessible site and remove the
-data from the package. See the section on "Storage of Data Files" below.
+3. Upload the data to a publicly accessible site and remove the
+data from the package. 
 
 4. Once the data is officially added to the hub, update any code to utilize
 AnnotationHub or ExperimentHub for retrieving data.
@@ -400,7 +402,7 @@ bug fixes and has to be done manually on the database by a core team member.
 * Notify hubs@bioconductor.org that you want to change the metadata for
   resources. The core team member will likely need the current AH/EH ids for the
   resources that need updating and a summary of what fields in the metadata file
-  changed. **NOTE:** Large chanes to the metadata may require the core team
+  changed. **NOTE:** Large changes to the metadata may require the core team
   member to remove the resources entirely from the database and re-add resulting
   in new AH/EH ids.
 
@@ -487,9 +489,10 @@ resources. See `?setAnnotationHubOption`
 The data should not be included in the package. This keeps the package light
 weight and quick for a user to install. This allows the user to investigate functions and
 documentation without downloading large data files and only proceeding with the
-download when necessary. There are two options for storing data: Bioconductor
-Microsoft Azure Genomic Data Lake or hosting the data elsewhere on a publicly accessible site. See
-information below and choose the option that fits best for your situation.
+download when necessary. When at all possible data should be hosted on a
+publicaly accessible site designated by the package maintainer. If this is not
+possible contact a core team member at hubs@bioconductor.org to request options
+for hosting. 
 
 ## Hosting Data on a Publicly Accessible Site
 
@@ -500,14 +503,17 @@ below but as a quick example if the link to the data file is
 `ftp://mylocalserver/singlecellExperiments/dataSet1.Rds` an example breakdown of
 the `Location_Prefix` and `RDataPath` for this entry in the metadata.csv file
 would be `ftp://mylocalserver/` for the `Location_Prefix` and
-`singlecellExperiments/dataSet1.Rds` for the `RDataPath`. Github is not an
-acceptable hosting platform for data.
+`singlecellExperiments/dataSet1.Rds` for the `RDataPath`. Github and Dropbox are not an
+acceptable hosting platform for data. We highly recommend zenodo; other
+possiblities include cloudflare, S3 buckets, microsoft data lakes, or possible a
+server located at your home institution.
 
 ## Uploading Data to Microsoft Azure Genomic Data Lake
 
-Instead of providing the data files via dropbox, ftp, github, etc. we will grant
-temporary access to temporary data lakes directory where you can upload your data. Please
-email hubs@bioconductor.org to obtain a SAS token for identification. 
+In some cases we may allow access to a `Bioconductor` Microsoft Azure Genomic
+Data Lake. Instead of providing the data files via dropbox, ftp, github, etc. we will grant
+temporary access to S3 directory where you can upload your data for preprocessing. Please
+email hubs@bioconductor.org to obtain access keys. 
 
 Please upload the data with the appropriate directory structure, including
 subdirectories as necessary (i.e. top directory must be software package name,
@@ -517,239 +523,85 @@ Once the upload is complete, email hubs@bioconductor.org to continue the
 process. To add the data officially the data will need to be uploaded and the
 metadata.csv file will need to be created in the github repository.
 
-There are a few different options users have for connecting to Microsoft Azure
-Genomic Data Lake to upload data. All require obtaining either a SAS token or
-SAS URL from the Bioconductor Core Team by emailing hubs@bioconductor.org. In
-the examples below if the token is used, please insert provided sas token for <sas
-token>; similarly if the sas url is used, please insert provided sas url for
-<sas url>. 
 
 
+### R Interface with R package 
 
-### R Interface with R package AzureStor
+Coming soon! 
 
-There is a way to upload data through the R package AzureStor and avoid having
-to download anything directly on your computer. Most of the documentation here is an
-adaption of the provided README and documentation provided through the AzureStor
-package and [AzureStor Github](https://github.com/Azure/AzureStor). 
+### Command Line via AWS S3 CLI
 
+In some cases we may allow access to a `Bioconductor` Microsoft Azure Genomic
+Data Lake. Instead of providing the data files via dropbox, ftp, github, etc. we will grant
+temporary access to S3 bucket where you can upload your
+data for preprocessing. The command line interface for upload is through AWS S3 Command Line
+Interface. You should install the [AWS CLI](https://aws.amazon.com/cli/) on your
+machine. Please email hubs@bioconductor.org to obtain necessary
+information. Examples below we assume the data on your system is in a directory
+call YourLocalDataDir and will use the following that would be provided by core
+team:
 
-Open R and load the AzureStor package provided through CRAN:
+1. username: hubtest1
+2. key: 102da5beeebe1339ef50dd9138589d8e46a354d1ad69a7b909f165d265f38a33
+3. core team bucket name: UploadDir
 
-
-```
-if (!requireNamespace("AzureStor", quietly = TRUE))
-    install.packages("AzureStor")
-
-library("AzureStor")
-```
-
-You will need to connect to the temporary storage location with provided sas credentials:
+To set up credentials on your system you would use the command
+`aws configure --profile <username>`. It will take you through prompts for AWS
+Access Key Id, AWS Secret Access Key, Default region name, and Default output
+format. Using our example information it would be something like the following:
 
 ```
-sas <- <sas token>
-url <- "https://bioconductorhubs.blob.core.windows.net"
-ep <- storage_endpoint(url, sas = sas)
-container <- storage_container(ep, "staginghub")
-```
-
-Now the command to upload will depend on if your data is currently stored
-locally or in a remote location.
-
-For locally available data use `storage_multiupload`. If your data files are in
-a local path `/home/user/mypackage/data` and assuming the name of your package
-is `mypackage` then you would use something like the following call:
+> aws configure --profile hubtest1
+AWS Access Key ID:  hubtest1
+AWS Secret Access Key: 102da5beeebe1339ef50dd9138589d8e46a354d1ad69a7b909f165d265f38a33
+Default region name: <leave blank>
+Default output format: <leave blank>
 
 ```
-files <- dir("/home/user/mypackage/data", recursive=TRUE)
-src <- dir("/home/user/mypackage/data", recursive=TRUE, full.names=TRUE)
-dest <- paste0("mypackage/", files)
-storage_multiupload(container, src=src, dest=dest)
-```
-Please make sure the `dest` value starts with the name of your package.
 
-For data that is currently being stored remotely (github, dropbox, ftp, etc),
-use `copy_url_to_storage` or `multicopy_url_to_storage`. As an example, say the
-data is store on a public github repository at `MyGithub/MyPackage`, in a
-package like directory strucutre where the data is in a data directory. 
+You would then be able to access the UploadDir that was set up for you. You can
+use `s3 cp` to upload data. Use with recursive to upload directories. The
+general form will be
 
 ```
-library(httr)
-
-# get the list of files for the repository
-response <- GET("https://api.github.com/repos/MyGithub/MyPackage/git/trees/master?recursive=1")
-
-# get the blob urls and file names
-src <- sapply(content(response)$tree, function(elt) elt$url)
-names <- sapply(content(response)$tree, function(elt) elt$path)
-
-# filter for the files in the data directory
-# if you are uploaded subdirectories filter out the github blob for the
-# directory name, subdirectories will be created automatically
-keep <- grepl("^data/", names)
-src <- src[keep]
-names <- names[keep]
-
-# we want the data in a directory with the package name
-# the data should only have relevant subdirectories
-dest = paste0("MyPackage/", gsub("data/","",names))
-
-# upload to azure
-multicopy_url_to_storage(container, src=src, dest=dest)
+aws --profile <username>
+--endpoint-url https://<username>.hubsingest.bioconductor.org/
+s3 cp --recursive <path to yourlocal directory>
+s3://<coreteam bucket name>/<local directory name>
+```
+So using our example data:
 
 ```
-Keep in mind that github has rate limiting factors. If you have reached a max
-rate, you might get an error `rate limit exceeded`. You would have to check your
-upload to see what uploaded correctly and what is missing. You can also use the
-argument max_concurrent_transfers to lower the transfer rate. 
-
-If you are using AzureStor version > 3.5.2.9000, you have the option of passing
-an authentication header into the multicopy_url_to_storage function. For github,
-you would pass a [generated Personal Access Token
-(PAT)](https://docs.github.com/en/authentication/keeping-your-account-and-data-secure/creating-a-personal-access-token)
-with repo level access.
+aws --profile hubtest1
+--endpoint-url https://hubtest1.hubsingest.bioconductor.org/
+s3 cp --recursive /path/to/YourLocalDataDir
+s3://UploadDir/YourLocalDataDir
 
 ```
-token = <github PAT>
-auth_header = paste("token", token)
-multicopy_url_to_storage(container, src=src, dest=dest, auth_header = auth_header)
-```
 
-This allows for secure access and will increase the maximum rate github allows.
-
-
-### Command Line via azcopy
-
-The command line interface for upload is through azcopy. Download [Microsoft
-azcopy](https://docs.microsoft.com/en-us/azure/storage/common/storage-use-azcopy-v10)
-and unzip/untar. You can choose to add the location of the azcopy executable
-file on your computer system PATH so that it can be found anywhere otherwise the
-following examples of utilizing azcopy should include the full path location
-where the file was unzip/untar. If the directory of data on your system is
-called MyPackageData, the following command would upload the directory:
+You can check the upload with `s3 ls`. With our example data it would look
+something like
 
 ```
-azcopy copy --recursive MyPackageData <sas url>
+aws --profile hubtest1
+--endpoint-url https://hubtest1.hubsingest.bioconductor.org/
+s3 ls --recursive s3://UploadDir/
 ```
-All files should be in a folder that matches your package name. Only upload data files;
+
+
+In general, all files should be in a folder that matches your package name. Only upload data files;
 subdirectories are optionally okay to include to distguish versions or
 characteristics of the data (i.e species, tissue types). Do not upload your
 entire package directory (i.e DESCRIPTION, NAMESPACE, R/, etc.)
 
-
-### GUI Interface with Azure Storage Explorer
-
-For a GUI like experience for uploading data, download the [Microsoft Azure
-Storage
-Explorer](https://docs.microsoft.com/en-us/azure/vs-azure-tools-storage-manage-with-storage-explorer?tabs=macos#overview). 
-
-Once Installed, open the storage explorer and follow the following
-steps.
-
-  1. The `Select Resource` window should automatically appear : select `Blob
-  Container`. If the windows does not automatically appear, see Troubleshooting
-  GUI at the bottom of this section for instructions on how to make this window
-  appear, how to navigate if already logged in with a valid, non-expired sas
-  token, and what to do if your sas token has expired or seeing an older login
-  displaying without access.
-
-  2. In the `Select Connection Method` window, select `Shared access signature
-  URL (SAS)` and click Next in the bottom right corner.
-  
-  3. In the `Enter Connection Info` window, Type `stainghub` into the Display
-  name. And insert the give <sas url> into the Blob container SAS URL
-  field. Then click Next in the bottom right corner.
-  
-  4. On the `Summary` window, verify and click Connect in the bottom right
-  corner.
-
-
-
-![](StorageExplorerScreenShots/SelectBlobContainer.png)
-![](StorageExplorerScreenShots/SelectSASAuth.png)
-![](StorageExplorerScreenShots/InsertSASurl.png)
-![](StorageExplorerScreenShots/Connect.png)
-
-
-
-You should now see a GUI version of the storage container. `staginghub` is the
-temporary location to upload data. This is a shared location and there may be
-other users data folders located here that are visible to you.  Your SAS token
-allows for list and create options so no user will be able to delete another
-users data. Please do not put your data into someone else's folder. All files
-should be in a folder that matches your package name. Only upload data files;
-subdirectories are optionally okay to include to distguish versions or
-characteristics of the data (i.e species, tissue types). Do not upload your
-entire package directory (i.e DESCRIPTION, NAMESPACE, R/, etc.)
-
-  1. If your data is already is a directory with your package name, Use the
-  upload folder option. Uploading a Folder will automatically upload any
-  subdirectories if utilized.
-  
-     + Choose `Upload` in the top left and select `Upload Folder` 
-
-     + Navigate to the appropriate folder on your local file system in the
-     `Selected folder` field.
-     
-     + Select `Block blob` as the Blob type.
-
-     + Leave the Destination directory as `/`
-
-     + Choose Upload in the bottom right
-
-
-
-  2. If your data is not in a directory with your package name:
-
-     +  Choose `Upload` in the top left and select `Upload Files`
-
-     + Navigate to and select the appropriate files on your local file
-     system. This option will not allow you to select at subdirectories or folders, only files.
-
-     + Select `Block blob` as the Blob type.
-
-     + Change the Destination directory to your package name.
-
-     + Choose Upload in the bottom right
-
-
-![](StorageExplorerScreenShots/Upload.png)
-![](StorageExplorerScreenShots/UploadFolder.png)
-![](StorageExplorerScreenShots/UploadFiles.png)
-
-
-Troubleshooting GUI
-
-If the connection window did not appear automatically on opening there are a few
-common issues that might be the cause.
-
-If you know you are not logged into a session, you can click on what looks like
-a outlet plug to launch the resource connection windows (see beginning of GUI section)
-
-If you have already logged in and are still connected with a valid, non-expired
-SAS, you can naviage directly to the storage container using the left navigation
-pane.
-
-  1. Click on `Local & Attached` to expand.
-  
-  2. Click on `Storage Accounts` to expand.
-
-  3. Click on `Attached Containers` to expand.
-
-  4. Click on `Blob Containers` to expand.
-
-  5. You should see the attached `staginghub`. If you click on it should be
-  accessible. If you get an error about connection authentication or at the
-  bottom left in the properties for `Shared Access Signature` it says expired,
-  you will have to detach the session and login with a valid SAS URL. To detach,
-  right click on the `staginghub` in the explorer section and select
-  `detach`. In the pop up for verification click "Yes". Relogin with a valid SAS
-  URL by clicking on the picture that looks like an outlet plug in the far. 
+Once the upload is complete, email hubs@bioconductor.org to continue the
+process. To add the data officially the data will need to be uploaded and the
+metadata.csv file will need to be created in the github repository.
 
 
 ### Utilizing the Bioconductor Docker container
 
-coming soon!
+Coming soon!
 
 
 # Validating

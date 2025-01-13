@@ -1,10 +1,11 @@
 Package: HubPub
 Title: Utilities to create and use Bioconductor Hubs
-Version: 1.15.0
+Version: 1.15.1
 Authors@R: c(
     person("Kayla", "Interdonato", email = "kayla.morrell16@gmail.com",
         role = c("aut", "cre")),
-    person("Martin", "Morgan", role = "aut"))
+    person("Martin", "Morgan", role = "aut"),
+    person("Lori", "Shepherd", role = "ctb"))
 Description: HubPub provides users with functionality to help with the 
     Bioconductor Hub structures. The package provides the ability to create a 
     skeleton of a Hub style package that the user can then populate with the 
