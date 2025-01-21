@@ -1,3 +1,6 @@
+Changes in version 1.15.3 (2024-01-21)
++ Update CreateAHubPackageVignette to include R package code for data upload
+
 Changes in version 1.15.1 (2024-01-13)
 + Update CreateAHubPackageVignette to use S3 instructions for data upload
 

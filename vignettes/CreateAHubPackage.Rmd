@@ -527,7 +527,35 @@ metadata.csv file will need to be created in the github repository.
 
 ### R Interface with R package 
 
-Coming soon! 
+In some cases we may allow access to a `Bioconductor` Microsoft Azure Genomic
+Data Lake. Please email hubs@bioconductor.org to obtain necessary
+information. Examples below we assume the data on your system is in a directory
+call YourLocalDataDir and will use the following that would be provided by core
+team:
+
+1. username: hubtest1
+2. key: 102da5beeebe1339ef50dd9138589d8e46a354d1ad69a7b909f165d265f38a33
+3. core team bucket name: userdata
+
+A helper R package has been created to assist with upload called
+BiocHubsIngestR; It is currently on
+[github](https://github.com/Bioconductor/BiocHubsIngestR). A contributor can use
+the following commands in R to upload data:
+
+```
+## install package
+if (!require("BiocManager", quietly = TRUE))
+    install.packages("BiocManager")
+BiocManager::install("Bioconductor/BiocHubsIngestR")
+
+## set up authentication
+BiocHubsIngestR::auth(username = "hubtest1", password = "102da5beeebe1339ef50dd9138589d8e46a354d1ad69a7b909f165d265f38a33")
+
+## Upload data
+BiocHubsIngestR::upload("/Local/Path/To/YourLocalDataDir", bucket="userdata")
+
+```
+
 
 ### Command Line via AWS S3 CLI
 
