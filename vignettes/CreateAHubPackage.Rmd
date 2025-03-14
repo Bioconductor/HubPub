@@ -354,10 +354,11 @@ metadata.csv file is formatted correctly by running
 `AnnotationHubData::makeAnnotationHubMetadata()` or
 `ExperimentHubData::makeExperimentHubMetadata()` on your package.
 
-2. Add biocViews term "AnnotationHub" or "ExperimentHub" to DESCRIPTION
+2. Add biocViews term "AnnotationHub" or "ExperimentHub" to DESCRIPTION (or
+"AnnotationHubSoftware", "ExperimentHubSoftware" if appropriate).
 
 3. Upload the data to a publicly accessible site and remove the
-data from the package. 
+data from the package. See the section on "Storage of Data Files" below.
 
 4. Once the data is officially added to the hub, update any code to utilize
 AnnotationHub or ExperimentHub for retrieving data.
@@ -512,8 +513,23 @@ server located at your home institution.
 
 In some cases we may allow access to a `Bioconductor` Microsoft Azure Genomic
 Data Lake. Instead of providing the data files via dropbox, ftp, github, etc. we will grant
-temporary access to S3 directory where you can upload your data for preprocessing. Please
-email hubs@bioconductor.org to obtain access keys. 
+temporary access to S3 directory where you can upload your data for
+preprocessing.
+
+If interesting in hosting on Bioconductor, please email
+hubs@bioconductor.org. You should provide the following information:
+
+1. Description or link to package and description of hosted data. Include why
+existing data already provided in similar packages or hub is not appropriate and
+why you would like to host your own.
+
+2. Why a location like zenodo is not appropriate and/or verification that you do
+not have access to an institutional level hosting location or something like S3
+bucket or Azure is not available.
+
+3. The number and size of files to be hosted and the total size that is to be
+uploaded.
+
 
 Please upload the data with the appropriate directory structure, including
 subdirectories as necessary (i.e. top directory must be software package name,
