@@ -1,6 +1,6 @@
 Package: HubPub
 Title: Utilities to create and use Bioconductor Hubs
-Version: 1.17.0
+Version: 1.17.1
 Authors@R: c(
     person("Kayla", "Interdonato", email = "kayla.morrell16@gmail.com",
         role = c("aut", "cre")),
@@ -23,6 +23,7 @@ Imports: available,
     utils
 Suggests: AnnotationHubData,
     ExperimentHubData,
+    GenomeInfoDbData,
     testthat,
     knitr,
     rmarkdown,
