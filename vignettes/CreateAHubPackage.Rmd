@@ -774,3 +774,13 @@ Title | Description | BiocVersion | Genome | SourceType | SourceUrl | SourceVers
 ---------------|----------------------------------------------|-----|-------------|-----|----------------------------------------------------------------------------------------------------|------------|-------------|------|------|---------|-------------------------------------------------------|-----------|----------|--------------------------------------------------------------------------
 Simulated Expression Data  | Simulated Expression values for 12 samples and 12000 probles | 3.9 | NA   | Simulated | http://mylabshomepage | v1 | NA | NA | NA | http://bioconductor.org/packages/myExperimentPackage | Bioconductor Maintainer <maintainer@bioconductor.org> | SummarizedExperiment | Rda | myExperimentPackage/SEobject.rda
 Simulated Database | Simulated Database containing gene mappings | 3.9 | hg19 | Simulated | http://bioconductor.org/packages/myExperimentPackage | v2 | Home sapiens | 9606 | NA | http://bioconductor.org/packages/myExperimentPackage | Bioconductor Maintainer <maintainer@bioconductor.org> | SQLiteConnection | SQLiteFile | myExperimentPackage/mydatabase.sqlite
+
+
+Let's also show an example if you were using zenodo to host the data:
+
+
+
+Title | Description | BiocVersion | Genome | SourceType | SourceUrl | SourceVersion | Species | TaxonomyId | Coordinate_1_based | DataProvider | Maintainer | RDataClass | DispatchClass | RDataPath | Location_Prefix
+---------------|----------------------------------------------|-----|-------------|-----|----------------------------------------------------------------------------------------------------|------------|-------------|------|------|---------|-------------------------------------------------------|-----------|----------|--------------------------------------------------------------------------|--------------------------------------------------------------------------
+Simulated Expression Data  | Simulated Expression values for 12 samples and 12000 probles | 3.9 | NA   | Simulated | http://mylabshomepage | v1 | NA | NA | NA | http://bioconductor.org/packages/myExperimentPackage | Bioconductor Maintainer <maintainer@bioconductor.org> | SummarizedExperiment | Rda | records/2353526/files/SEobject.rda | https://zenodo.org/
+Simulated Database | Simulated Database containing gene mappings | 3.9 | hg19 | Simulated | http://bioconductor.org/packages/myExperimentPackage | v2 | Home sapiens | 9606 | NA | http://bioconductor.org/packages/myExperimentPackage | Bioconductor Maintainer <maintainer@bioconductor.org> | SQLiteConnection | SQLiteFile | records/2353526/files/mydatabase.sqlite | https://zenodo.org/
