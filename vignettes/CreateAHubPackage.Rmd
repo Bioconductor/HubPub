@@ -1,7 +1,7 @@
 ---
 title: "Creating A Hub Package: ExperimentHub or AnnotationHub"
 author: "Valerie Obenchain, Lori Shepherd, and Kayla Interdonato"
-date: "Modified: Jan 2025. Compiled: `r format(Sys.Date(), '%d %b %Y')`"
+date: "Modified: Jul 2026. Compiled: `r format(Sys.Date(), '%d %b %Y')`"
 output:
   BiocStyle::html_document:
     toc: true
@@ -66,11 +66,17 @@ creating a package. The package should minimally contain the resource metadata,
 man pages describing the resources, and a vignette. It may also contain supporting
 `R` functions the author wants to provide. This is a similar design to the
 existing `Bioconductor` experimental data packages or annotation packages except
-the data is stored in Microsoft Azure Genomic Data Lake or other publicly accessibly
-sites (like Amazon S3 buckets or institutional servers) instead of
+the data is stored in Zenodo or Dryad or other publicly accessibly
+sites (like Amazon S3 buckets, Microsoft Azure Genomic Data Lake, or institutional servers) instead of
 the `data/` or `inst/extdata/` directory of the package. This keeps the package
-light weight and allows users to download only necessary data files.
+light weight and allows users to download only necessary data files.  Consider
+how much data is truly necessary for the package; end users will have their own
+data to analyze so forcing users to download excessive data is not
+advisable. Consider minimal data for use in man pages, unit tests, and
+vignettes. 
 
+Bioconductor does not allow git-lfs or utilizing personal repositories for
+storing data like GitHub or Dropbox.
 
 Below are the steps required for creating the package and adding new resources:
 
@@ -82,12 +88,9 @@ the data are available in `AnnotationHub` or `ExperimentHub`. If you are not
 hosting the data on a stable web server (github and dropbox does not suffice), you should
 look into a stable option. We highly recommend zenodo; other options can
 include cloudflare, S3 buckets, mircorsoft azure data lake, or an institutional
-level server. If you do not have access to a secure location, you can reach out
-to `Bioconductor` team member to discuss at hubs@bioconductor.org. Adding data
-to the live location will also require reaching out to hubs@bioconductor.org. To
-have the data live in the appropriate hub, the metadata.csv file will have to be
-created (See inst/extdata section below) and the description file of the package
-will need to be accurate. 
+level server. To have the data live in the appropriate hub, the metadata.csv
+file will have to be created (See inst/extdata section below) and the
+description file of the package will need to be accurate. 
 
 ### Building the package
 
@@ -163,28 +166,6 @@ unless otherwise stated.
 - `R/*.R`: Optional. Functions to enhance data exploration.
 
 
-**For ExperimentHub resources only:**
-- `zzz.R`: Optional. You can include a `.onLoad()` function in a zzz.R file that
-  exports each resource name (i.e., metadata.csv field `title`) into a function. This allows the data
-  to be loaded by name, e.g., `resource123()`.
-
-    ```{r, eval=FALSE}
-    .onLoad <- function(libname, pkgname) {
-       fl <- system.file("extdata", "metadata.csv", package=pkgname)
-       titles <- read.csv(fl, stringsAsFactors=FALSE)$Title
-       createHubAccessors(pkgname, titles)
-    }
-    ```
-
-    `ExperimentHub::createHubAccessors()` and
-    `ExperimentHub:::.hubAccessorFactory()` provide internal
-    detail. The resource-named function has a single 'metadata'
-    argument. When metadata=TRUE, the metadata are loaded (equivalent
-    to single-bracket method on an ExperimentHub object) and when
-    FALSE the full resource is loaded (equivalent to double-bracket
-    method).
-
-
 #### `man/`
 
 - package man page:
@@ -226,13 +207,6 @@ unless otherwise stated.
     myfiles[[1]]  ## load the first resource in the list
     ```
 
-- **ExperimentHub packages only** If a `.onLoad()` function is used to export each resource as a function
-  also document that method of loading, e.g.,
-
-    ```{r, eval=FALSE}
-    resourceA(metadata = FALSE) ## data are loaded
-    resourceA(metadata = TRUE)  ## metadata are displayed
-    ```
 - Package authors are encouraged to use the `ExperimentHub::listResources()` and
   `ExperimentHub::loadResource()` functions in their man pages and vignette.
   These helpers are designed to facilitate data discovery within a specific
@@ -241,9 +215,7 @@ unless otherwise stated.
 
 #### `DESCRIPTION` / `NAMESPACE`
 
-- The package should depend on and fully import AnnotationHub or ExperimentHub. If using the
-  suggested `.onLoad()` function for ExperimentHub, import the utils package in the DESCRIPTION
-  file and selectively importFrom(utils, read.csv) in the NAMESPACE.
+- The package should depend on and fully import AnnotationHub or ExperimentHub.
 
 
 - If making an Experiment Data Hub package, the biocViews should contain terms
@@ -267,6 +239,10 @@ and should also contain the term `AnnotationHub`.
 Large data are not formally part of the software package and are stored separately in
 a publicly accessible hosted site.
 
+Consider removing the history of the large file present in the package. If the
+file was over 100 MB this will be a mandatory step before inclusion into
+Bioconductor. See [Removing Large Files from Git](https://contributions.bioconductor.org/git-version-control.html#remove-large-data-files-and-clean-git-tree)
+
 
 ### Confirm Valid Metadata
 
@@ -284,7 +260,7 @@ warnings or errors.
 Once the  metadata have been added to the
 production database the man pages and vignette can be finalized. When the
 package passes R CMD build and check it can be submitted to the
-[package tracker](https://github.com/Bioconductor/Contributions) for
+[package tracker](https://github.com/Bioconductor/BiocContributions) for
 review. The package should be submitted without any of the data that is now
 located remotely. This keeps the package light weight and minimal size while still
 providing access to key large data files now stored remotely. If the data files
@@ -292,12 +268,6 @@ were added to the github repository please see [removing large data files and
 clean git
 tree](http://bioconductor.org/developers/how-to/git/remove-large-data/) to
 remove the large files and reduce package size.
-
-Many times these data package are created as a supplement to a software
-package. There is a process for submitting [multiple package under the same
-issue](https://github.com/Bioconductor/Contributions#submitting-related-packages).
-
-
 
 
 
@@ -325,7 +295,7 @@ become available.
   old file should remain.  When adding a new version it might be helpful to
   write a new csv file named by version, e.g., metadata_v84.csv, metadata_85.csv
   etc. If using a single metadata.csv file, please add new or updated entries to
-  the end of the file.
+  the end of the file and label with appropriate BiocVersion.
   
 * Bump package version and commit to git
 
@@ -381,13 +351,10 @@ A bug fix may involve a change to the metadata, data resource or both.
 * The replacement resource must have the same name as the original and
   be at the same location (path).
 
-* Notify hubs@bioconductor.org that you want to replace the data
-  and make the files available: see section "Uploading Data to Microsoft Azure
-  Genomic Data Lake".
-
-* If a file is replaced on the data lake directly, the old file will no longer be
+* If a file is replaced directly, keep in mind the old file will no longer be
   accessible. This could affect reproducibility of end users' research if the
-  old file has already been utilized. This approach should be done with caution.
+  old file has already been utilized. This approach should be done with
+  caution and when possible retain backwards compatibility.
 
 
 ## Update the metadata
@@ -491,9 +458,12 @@ The data should not be included in the package. This keeps the package light
 weight and quick for a user to install. This allows the user to investigate functions and
 documentation without downloading large data files and only proceeding with the
 download when necessary. When at all possible data should be hosted on a
-publicaly accessible site designated by the package maintainer. If this is not
-possible contact a core team member at hubs@bioconductor.org to request options
-for hosting. 
+publicaly accessible site designated by the package maintainer. 
+
+Bioconductor does not allow git-lfs or utilizing personal repositories for
+storing data like GitHub or Dropbox.
+
+
 
 ## Hosting Data on a Publicly Accessible Site
 
@@ -501,151 +471,13 @@ Data can be accessed through the hubs from any publicly accessible site. The
 metadata.csv file[s] created will need the column `Location_Prefix` to indicate
 the hosted site. See more in the description of the metadata columns/fields
 below but as a quick example if the link to the data file is
-`ftp://mylocalserver/singlecellExperiments/dataSet1.Rds` an example breakdown of
+`https://mylocalserver/singlecellExperiments/dataSet1.Rds` an example breakdown of
 the `Location_Prefix` and `RDataPath` for this entry in the metadata.csv file
-would be `ftp://mylocalserver/` for the `Location_Prefix` and
+would be `https://mylocalserver/` for the `Location_Prefix` and
 `singlecellExperiments/dataSet1.Rds` for the `RDataPath`. Github and Dropbox are not an
 acceptable hosting platform for data. We highly recommend zenodo; other
 possiblities include cloudflare, S3 buckets, microsoft data lakes, or possible a
 server located at your home institution.
-
-## Uploading Data to Microsoft Azure Genomic Data Lake
-
-In some cases we may allow access to a `Bioconductor` Microsoft Azure Genomic
-Data Lake. Instead of providing the data files via dropbox, ftp, github, etc. we will grant
-temporary access to S3 directory where you can upload your data for
-preprocessing.
-
-If interesting in hosting on Bioconductor, please email
-hubs@bioconductor.org. You should provide the following information:
-
-1. Description or link to package and description of hosted data. Include why
-existing data already provided in similar packages or hub is not appropriate and
-why you would like to host your own.
-
-2. Why a location like zenodo is not appropriate and/or verification that you do
-not have access to an institutional level hosting location or something like S3
-bucket or Azure is not available.
-
-3. The number and size of files to be hosted and the total size that is to be
-uploaded.
-
-
-Please upload the data with the appropriate directory structure, including
-subdirectories as necessary (i.e. top directory must be software package name,
-then if applicable, subdirectories of versions, ...).   
-
-Once the upload is complete, email hubs@bioconductor.org to continue the
-process. To add the data officially the data will need to be uploaded and the
-metadata.csv file will need to be created in the github repository.
-
-
-
-### R Interface with R package 
-
-In some cases we may allow access to a `Bioconductor` Microsoft Azure Genomic
-Data Lake. Please email hubs@bioconductor.org to obtain necessary
-information. Examples below we assume the data on your system is in a directory
-call YourLocalDataDir and will use the following that would be provided by core
-team:
-
-1. username: hubtest1
-2. key: 102da5beeebe1339ef50dd9138589d8e46a354d1ad69a7b909f165d265f38a33
-3. core team bucket name: userdata
-
-A helper R package has been created to assist with upload called
-BiocHubsIngestR; It is currently on
-[github](https://github.com/Bioconductor/BiocHubsIngestR). A contributor can use
-the following commands in R to upload data:
-
-```
-## install package
-if (!require("BiocManager", quietly = TRUE))
-    install.packages("BiocManager")
-BiocManager::install("Bioconductor/BiocHubsIngestR")
-
-## set up authentication
-BiocHubsIngestR::auth(username = "hubtest1", password = "102da5beeebe1339ef50dd9138589d8e46a354d1ad69a7b909f165d265f38a33")
-
-## Upload data
-BiocHubsIngestR::upload("/Local/Path/To/YourLocalDataDir", bucket="userdata")
-
-```
-
-
-### Command Line via AWS S3 CLI
-
-In some cases we may allow access to a `Bioconductor` Microsoft Azure Genomic
-Data Lake. Instead of providing the data files via dropbox, ftp, github, etc. we will grant
-temporary access to S3 bucket where you can upload your
-data for preprocessing. The command line interface for upload is through AWS S3 Command Line
-Interface. You should install the [AWS CLI](https://aws.amazon.com/cli/) on your
-machine. Please email hubs@bioconductor.org to obtain necessary
-information. Examples below we assume the data on your system is in a directory
-call YourLocalDataDir and will use the following that would be provided by core
-team:
-
-1. username: hubtest1
-2. key: 102da5beeebe1339ef50dd9138589d8e46a354d1ad69a7b909f165d265f38a33
-3. core team bucket name: userdata
-
-To set up credentials on your system you would use the command
-`aws configure --profile <username>`. It will take you through prompts for AWS
-Access Key Id, AWS Secret Access Key, Default region name, and Default output
-format. Using our example information it would be something like the following:
-
-```
-> aws configure --profile hubtest1
-AWS Access Key ID:  hubtest1
-AWS Secret Access Key: 102da5beeebe1339ef50dd9138589d8e46a354d1ad69a7b909f165d265f38a33
-Default region name: <leave blank>
-Default output format: <leave blank>
-
-```
-
-You would then be able to access the userdata that was set up for you. You can
-use `s3 cp` to upload data. Use with recursive to upload directories. The
-general form will be
-
-```
-aws --profile <username>
---endpoint-url https://<username>.hubsingest.bioconductor.org/
-s3 cp --recursive <path to yourlocal directory>
-s3://<coreteam bucket name>/<local directory name>
-```
-So using our example data:
-
-```
-aws --profile hubtest1
---endpoint-url https://hubtest1.hubsingest.bioconductor.org/
-s3 cp --recursive /path/to/YourLocalDataDir
-s3://userdata/YourLocalDataDir
-
-```
-
-You can check the upload with `s3 ls`. With our example data it would look
-something like
-
-```
-aws --profile hubtest1
---endpoint-url https://hubtest1.hubsingest.bioconductor.org/
-s3 ls --recursive s3://userdata/
-```
-
-
-In general, all files should be in a folder that matches your package name. Only upload data files;
-subdirectories are optionally okay to include to distguish versions or
-characteristics of the data (i.e species, tissue types). Do not upload your
-entire package directory (i.e DESCRIPTION, NAMESPACE, R/, etc.)
-
-Once the upload is complete, email hubs@bioconductor.org to continue the
-process. To add the data officially the data will need to be uploaded and the
-metadata.csv file will need to be created in the github repository.
-
-
-### Utilizing the Bioconductor Docker container
-
-Coming soon!
 
 
 # Validating
@@ -710,16 +542,12 @@ file. Briefly, a description of the metadata columns required:
   hubs@bioconductor.org. An all purpose DispathClass is `FilePath` that
   instead of trying to load the file into R, will only return the path to the
   locally downloaded file.
-* Location_Prefix: 'character(1)'. **Do not** include this field if data are stored
-  in the Bioconductor Data Lake; it will be generated automatically. If data will
-  be accessed from a location other than Bioconductor's Microsoft Data Lake
-  location,  this field should be the base url.
+* Location_Prefix: 'character(1)'. This field should be the base url of hosting
+  location `https://zenodo.org/`.
 * RDataPath: 'character(1)'.This field should be the remainder of the path to
   the resource. The 'Location_Prefix' will be prepended to 'RDataPath' for the
-  full path to the resource.  If the resource is stored in Bioconductor's AWS S3
-  buckets, it should start with the name of the package associated with the
-  metadata and should not start with a leading slash. It should include the
-  resource file name.
+  full path to the resource. It should not start with a leading slash. It should
+  include the resource file name.
 * Tags: 'character() vector'.  'Tags' are search terms used to define a subset
   of resources in a 'Hub' object, e.g, in a call to 'query'. Multiple 'Tags' are
   specified as a colon separated string, e.g., tags for two resources would look
@@ -732,33 +560,11 @@ Any additional columns in the metadata.csv file will be ignored but could be
 included for internal reference.
 
 More on Location_Prefix and RDataPath. These two fields make up the complete
-file path url for downloading the data file. If using the Bioconductor Microsoft
-Azure Genomic Data Lake the Location_Prefix should not be included in the metadata file[s] as this field
-will be populated automatically.  The RDataPath will be the directory structure
-you uploaded to the Data Lake. If you uploaded a directory `MyAnnotation/`, and that
-directory had a subdirectory `v1/` that contained two files `counts.rds` and
-`coldata.rds`, your metadata file will contain two rows and the RDataPaths would
-be `MyAnnotation/v1/counts.rds` and `MyAnnotation/v1/coldata.rds`.  If you
-host your data on a publicly accessible site you must include a base url as the
-`Location_Prefix`. If your data file was at
-`ftp://myinstiututeserver/biostats/project2/counts.rds`, your metadata file will
-have one row and the `Location_Prefix` would be `ftp://myinstiututeserver/` and
+file path url for downloading the data file. If you host your data on a publicly
+accessible site you must include a base url as the `Location_Prefix`. If your data file was at
+`https://myinstiututeserver/biostats/project2/counts.rds`, your metadata file will
+have one row and the `Location_Prefix` would be `https://myinstiututeserver/` and
 the `RDataPath` would be `biostats/project2/counts.rds`.
-
-
-This is a bad example because these annotations are already in the hubs but it
-should give you an idea of the format for AnnotationHub. Let's say I have a package myAnnotations
-and I upload two annotation files for dog and cow with information extracted from
-ensembl to Bioconductor's Data Lake location.  You would want the following saved as a csv (comma seperated output)
-but for easier view we show in a table:
-
-
-Title | Description | BiocVersion | Genome | SourceType | SourceUrl | SourceVersion | Species | TaxonomyId | Coordinate_1_based | DataProvider | Maintainer | RDataClass | DispatchClass | RDataPath
----------------|----------------------------------------------|-----|-------------|-----|----------------------------------------------------------------------------------------------------|------------|-------------|------|------|---------|-------------------------------------------------------|-----------|----------|--------------------------------------------------------------------------
-Dog Annotation | Gene Annotation for Canis lupus from ensembl | 3.9 | Canis lupus | GTF | ftp://ftp.ensembl.org/pub/release-95/gtf/canis_lupus_dingo/Canis_lupus_dingo.ASM325472v1.95.gtf.gz | release-95 | Canis lupus | 9612 | true | ensembl | Bioconductor Maintainer <maintainer@bioconductor.org> | character | FilePath | myAnnotations/canis_lupus_dingo.ASM325472v1.95.gtf.gz
-Cow Annotation | Gene Annotation for Bos taurus from ensemble | 3.9 | Bos taurus | GTF | ftp://ftp.ensembl.org/pub/release-74/gtf/bos_taurus/Bos_taurus.UMD3.1.74.gtf.gz | release-74 | Bos taurus | 9913 | true | ensembl | Bioconductor Maintainer <maintainer@bioconductor.org> | character | FilePath | myAnnotations/Bos_taurus.UMD3.1.74.gtf.gz
-
-
 
 
 This is a dummy example but hopefully it will give you an idea of the format for
@@ -777,7 +583,6 @@ Simulated Database | Simulated Database containing gene mappings | 3.9 | hg19 | 
 
 
 Let's also show an example if you were using zenodo to host the data:
-
 
 
 Title | Description | BiocVersion | Genome | SourceType | SourceUrl | SourceVersion | Species | TaxonomyId | Coordinate_1_based | DataProvider | Maintainer | RDataClass | DispatchClass | RDataPath | Location_Prefix
